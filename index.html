@@ -442,8 +442,12 @@
           <div class="seg" id="f-decision"><button type="button" class="so" data-v="Yes">✓ Purchased</button><button type="button" class="so" data-v="No">✕ Walked away</button></div>
         </div>
         <div class="reason-block" id="f-reasonblock">
-          <div class="field"><label>Reason for rejection <span class="req">*</span></label>
-            <select id="f-reason"><option value="">Select…</option><option>Too Expensive</option><option>Not Needed</option><option>Already Own Similar Product</option><option>Need More Information</option><option>Lack of Trust</option></select></div>
+          <div class="two">
+            <div class="field"><label>Reason for walkaway <span class="req">*</span></label>
+              <select id="f-reason"><option value="">Select…</option><option>Too Expensive</option><option>Not Needed</option><option>Already Own Similar Product</option><option>Need More Information</option><option>Lack of Trust</option></select></div>
+            <div class="field"><label>Secondary reason <span style="color:var(--muted-2);font-weight:500">(optional)</span></label>
+              <select id="f-reason2"><option value="">None</option><option>Too Expensive</option><option>Not Needed</option><option>Already Own Similar Product</option><option>Need More Information</option><option>Lack of Trust</option></select></div>
+          </div>
           <div class="field"><label>Customer notes</label><textarea id="f-notes" placeholder="e.g. Liked the product but wanted to compare prices first…"></textarea></div>
         </div>
         <button class="btn" style="width:100%;padding:13px;margin-top:6px" id="f-submit">Record insight</button>
@@ -640,9 +644,10 @@
   ];
   var data = seed.map(function(s,i){
     var d=new Date(); d.setDate(d.getDate()-(seed.length-i));
-    return {id:'WN-'+String(i+1).padStart(3,'0'),product:s[0],decision:s[1],reason:s[2],age:s[3],gender:s[4],
+    return {id:'WN-'+String(i+1).padStart(3,'0'),product:s[0],decision:s[1],reason:s[2],reason2:null,age:s[3],gender:s[4],
             notes:'',rep:REPS[i%REPS.length],date:d};
   });
+  data[12].reason2='Need More Information'; data[14].reason2='Lack of Trust'; data[25].reason2='Too Expensive';
 
   /* ───── helpers ───── */
   var $=function(s,el){return (el||document).querySelector(s);};
@@ -863,16 +868,17 @@
     }).sort(function(a,b){return b.date-a.date;});
     $('#db-body').innerHTML=rows.map(function(d){
       var no=d.decision==='No';
+      var rc=(d.reason||'—')+(d.reason2?(' <span style="color:var(--muted-2);font-size:11px">+ '+d.reason2+'</span>'):'');
       return '<tr><td class="cid">'+d.id+'</td><td class="muted">'+fmtDate(d.date)+'</td><td>'+d.product+'</td>'+
         '<td><span class="tag '+(no?'no':'yes')+'">'+(no?'Walked away':'Purchased')+'</span></td>'+
-        '<td class="muted">'+(d.reason||'—')+'</td><td class="muted">'+d.age+'</td><td>'+d.rep+'</td></tr>';
+        '<td class="muted">'+rc+'</td><td class="muted">'+d.age+'</td><td>'+d.rep+'</td></tr>';
     }).join('') || '<tr><td colspan="7" style="padding:30px;text-align:center;color:var(--muted-2)">No interactions match these filters.</td></tr>';
     $('#db-count').textContent=rows.length+' of '+data.length+' interactions';
   }
   function exportCSV(){
-    var head=['Customer ID','Date','Product','Decision','Reason','Age Group','Gender','Salesperson','Notes'];
+    var head=['Customer ID','Date','Product','Decision','Reason','Secondary Reason','Age Group','Gender','Salesperson','Notes'];
     var lines=[head.join(',')].concat(data.map(function(d){
-      return [d.id,d.date.toISOString().slice(0,10),d.product,d.decision,(d.reason||''),d.age,d.gender,d.rep,(d.notes||'').replace(/[",\n]/g,' ')]
+      return [d.id,d.date.toISOString().slice(0,10),d.product,d.decision,(d.reason||''),(d.reason2||''),d.age,d.gender,d.rep,(d.notes||'').replace(/[",\n]/g,' ')]
         .map(function(c){return '"'+String(c).replace(/"/g,'""')+'"';}).join(',');
     }));
     var blob=new Blob([lines.join('\n')],{type:'text/csv'});
@@ -915,13 +921,13 @@
   });
   $('#f-submit').addEventListener('click',function(){
     var rep=$('#f-rep').value, age=$('#f-age').value, product=$('#f-product').value;
-    var reason=$('#f-reason').value, notes=$('#f-notes').value, gender=$('#f-gender').value;
+    var reason=$('#f-reason').value, reason2=$('#f-reason2').value, notes=$('#f-notes').value, gender=$('#f-gender').value;
     if(!rep||!age||!product||!sel.decision||(sel.decision==='No'&&!reason)){toast('Please complete the required fields');return;}
     var d=new Date();
     data.push({id:'WN-'+String(data.length+1).padStart(3,'0'),product:product,decision:sel.decision,
-      reason:sel.decision==='No'?reason:null,age:age,gender:gender||'—',notes:notes,rep:rep,date:d});
+      reason:sel.decision==='No'?reason:null,reason2:(sel.decision==='No'&&reason2)?reason2:null,age:age,gender:gender||'—',notes:notes,rep:rep,date:d});
     // reset
-    ['f-rep','f-age','f-product','f-reason','f-gender'].forEach(function(id){$('#'+id).value='';});
+    ['f-rep','f-age','f-product','f-reason','f-reason2','f-gender'].forEach(function(id){$('#'+id).value='';});
     $('#f-notes').value=''; sel.decision=null;
     document.querySelectorAll('#f-decision .so').forEach(function(x){x.classList.remove('on');});
     $('#f-reasonblock').classList.remove('show');
