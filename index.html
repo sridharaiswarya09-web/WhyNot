@@ -1,0 +1,1898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WHY NOT? — Turning "No" into Know</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FFFFFF;
+    --ink:#0E1116;
+    --muted:#5B6473;
+    --muted-2:#8A93A4;
+    --line:rgba(17,20,28,.08);
+    --line-2:rgba(17,20,28,.06);
+    --indigo:#4F46E5;
+    --indigo-700:#4338CA;
+    --violet:#7C3AED;
+    --blue:#2563EB;
+    --sky:#0EA5E9;
+    --cyan:#0891B2;
+    --emerald:#059669;
+    --amber:#F59E0B;
+    --rose:#E11D48;
+    --indigo-soft:rgba(79,70,229,.08);
+    --emerald-soft:rgba(5,150,105,.10);
+    --rose-soft:rgba(225,29,72,.10);
+    --amber-soft:rgba(245,158,11,.12);
+    --glass:rgba(255,255,255,.72);
+    --glass-2:rgba(255,255,255,.55);
+    --glass-brd:rgba(255,255,255,.7);
+    --shadow-sm:0 1px 2px rgba(17,20,28,.06), 0 1px 3px rgba(17,20,28,.05);
+    --shadow:0 6px 16px -8px rgba(17,20,28,.14), 0 2px 6px -4px rgba(17,20,28,.08);
+    --shadow-lg:0 24px 60px -28px rgba(40,38,90,.32), 0 8px 24px -16px rgba(17,20,28,.14);
+    --r:18px;
+    --fd:"Inter Tight",system-ui,sans-serif;
+    --fb:"Inter",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--fb);color:var(--ink);background:var(--bg);
+    line-height:1.5;-webkit-font-smoothing:antialiased;
+    font-feature-settings:"cv05" 1,"ss01" 1;
+    overflow-x:hidden;
+  }
+  /* ambient color so glass has something to refract */
+  body::before{
+    content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+    background:
+      radial-gradient(680px 460px at 8% -6%, rgba(79,70,229,.16), transparent 60%),
+      radial-gradient(620px 460px at 102% 0%, rgba(124,58,237,.13), transparent 60%),
+      radial-gradient(700px 520px at 88% 108%, rgba(14,165,233,.12), transparent 60%),
+      radial-gradient(620px 480px at -4% 112%, rgba(5,150,105,.08), transparent 60%);
+  }
+  ::selection{background:rgba(79,70,229,.16)}
+  a{color:inherit;text-decoration:none}
+  button{font-family:inherit;cursor:pointer}
+  .tnum{font-variant-numeric:tabular-nums}
+
+  /* ───────── NAVBAR ───────── */
+  .nav{
+    position:sticky;top:0;z-index:100;
+    backdrop-filter:saturate(1.6) blur(16px);-webkit-backdrop-filter:saturate(1.6) blur(16px);
+    background:rgba(255,255,255,.74);border-bottom:1px solid var(--line);
+  }
+  .nav-in{max-width:1240px;margin:0 auto;padding:13px 22px;display:flex;align-items:center;gap:20px}
+  .logo{display:flex;align-items:center;gap:9px;font-family:var(--fd);font-weight:800;letter-spacing:-.02em;font-size:18px}
+  .logo .mark{
+    width:28px;height:28px;border-radius:9px;display:grid;place-items:center;color:#fff;font-size:15px;
+    background:linear-gradient(145deg,var(--indigo),var(--violet));box-shadow:0 6px 14px -6px rgba(79,70,229,.7);
+  }
+  .logo b{color:var(--indigo)}
+  .nav-links{display:flex;gap:3px;margin-left:8px;flex:1;overflow-x:auto;scrollbar-width:none}
+  .nav-links::-webkit-scrollbar{display:none}
+  .nav-links a{
+    padding:8px 13px;border-radius:10px;font-size:13.5px;font-weight:500;color:var(--muted);
+    white-space:nowrap;transition:.15s;
+  }
+  .nav-links a:hover{color:var(--ink);background:var(--indigo-soft)}
+  .nav-links a.active{color:var(--indigo);background:var(--indigo-soft);font-weight:600}
+  .btn{
+    border:none;border-radius:11px;font-weight:600;font-size:13.5px;padding:9px 16px;
+    background:linear-gradient(145deg,var(--indigo),var(--indigo-700));color:#fff;white-space:nowrap;
+    box-shadow:0 8px 20px -8px rgba(79,70,229,.6);transition:.16s;
+  }
+  .btn:hover{transform:translateY(-1px);box-shadow:0 12px 26px -8px rgba(79,70,229,.7)}
+  .btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line);box-shadow:var(--shadow-sm)}
+  .btn.ghost:hover{background:#fafbff}
+
+  /* ───────── LAYOUT ───────── */
+  main{max-width:1240px;margin:0 auto;padding:0 22px 90px}
+  .view{display:none;animation:fade .4s ease}
+  .view.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  .eyebrow{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--indigo)}
+  .page-head{padding:34px 0 22px}
+  .page-head h2{font-family:var(--fd);font-weight:700;font-size:30px;letter-spacing:-.025em;margin-top:8px}
+  .page-head p{color:var(--muted);margin-top:7px;max-width:560px;font-size:15px}
+
+  /* glass card */
+  .glass{
+    background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+    border:1px solid var(--glass-brd);border-radius:var(--r);box-shadow:var(--shadow);
+  }
+  .card-pad{padding:20px}
+
+  /* ───────── HERO ───────── */
+  .hero{padding:64px 0 30px;text-align:center;position:relative}
+  .hero .pill{
+    display:inline-flex;align-items:center;gap:8px;padding:6px 13px;border-radius:99px;font-size:12.5px;font-weight:600;
+    color:var(--indigo-700);background:var(--indigo-soft);border:1px solid rgba(79,70,229,.18);
+  }
+  .hero .pill .dot{width:7px;height:7px;border-radius:50%;background:var(--emerald)}
+  .hero h1{
+    font-family:var(--fd);font-weight:800;letter-spacing:-.035em;line-height:1.04;margin:22px auto 0;
+    font-size:clamp(38px,6vw,66px);max-width:880px;
+  }
+  .hero h1 .grad{
+    background:linear-gradient(115deg,var(--indigo),var(--violet) 60%,var(--sky));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .hero .sub{color:var(--muted);font-size:clamp(16px,2vw,19px);max-width:580px;margin:20px auto 0}
+  .hero .cta{display:flex;gap:12px;justify-content:center;margin-top:30px;flex-wrap:wrap}
+  .hero .btn{padding:13px 24px;font-size:15px;border-radius:13px}
+
+  .stat-row{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:56px;
+  }
+  .stat{padding:24px 20px;text-align:left;position:relative;overflow:hidden}
+  .stat .v{font-family:var(--fd);font-weight:800;font-size:40px;letter-spacing:-.03em;line-height:1}
+  .stat .l{color:var(--muted);font-size:13.5px;margin-top:8px;font-weight:500}
+  .stat .ic{position:absolute;right:16px;top:16px;width:34px;height:34px;border-radius:10px;display:grid;place-items:center}
+
+  .logos{margin-top:60px;text-align:center}
+  .logos p{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);font-weight:600}
+  .logos .row{display:flex;gap:34px;justify-content:center;flex-wrap:wrap;margin-top:18px;opacity:.6;font-family:var(--fd);font-weight:700;font-size:18px;color:var(--muted)}
+
+  .feat{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:64px}
+  .feat .f{padding:22px}
+  .feat .f .fi{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;margin-bottom:14px}
+  .feat .f h3{font-family:var(--fd);font-size:17px;font-weight:700;letter-spacing:-.01em}
+  .feat .f p{color:var(--muted);font-size:14px;margin-top:6px}
+
+  /* ───────── KPI GRID ───────── */
+  .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .kpi{padding:20px;position:relative;transition:.18s}
+  .kpi:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+  .kpi .top{display:flex;justify-content:space-between;align-items:flex-start}
+  .kpi .k{font-size:13px;color:var(--muted);font-weight:500}
+  .kpi .ic{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;flex:none}
+  .kpi .v{font-family:var(--fd);font-weight:800;font-size:32px;letter-spacing:-.025em;margin-top:14px;line-height:1}
+  .kpi .meta{font-size:12.5px;margin-top:7px;font-weight:600}
+  .kpi .meta.pos{color:var(--emerald)} .kpi .meta.neg{color:var(--rose)} .kpi .meta.mut{color:var(--muted-2)}
+
+  /* grids of charts */
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+  .panel{padding:20px}
+  .panel h3{font-family:var(--fd);font-size:16px;font-weight:700;letter-spacing:-.01em;display:flex;align-items:center;gap:9px}
+  .panel .ph-sub{color:var(--muted-2);font-size:12.5px;margin-top:2px}
+  .panel-head{margin-bottom:16px}
+
+  /* donut + legend */
+  .donut-wrap{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+  .donut{position:relative;width:172px;height:172px;flex:none}
+  .donut .mid{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .donut .mid .n{font-family:var(--fd);font-weight:800;font-size:26px;letter-spacing:-.02em}
+  .donut .mid .t{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2);font-weight:700;margin-top:2px}
+  .legend{flex:1;min-width:170px;display:flex;flex-direction:column;gap:11px}
+  .legend .li{display:flex;align-items:center;gap:10px}
+  .legend .sw{width:10px;height:10px;border-radius:3px;flex:none}
+  .legend .ln{font-size:13px;flex:1}
+  .legend .lv{font-family:var(--fd);font-weight:700;font-size:13px;color:var(--muted)}
+
+  /* horizontal bars */
+  .bars{display:flex;flex-direction:column;gap:15px}
+  .bar .bh{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px}
+  .bar .bn{font-size:13.5px;font-weight:500}
+  .bar .bv{font-family:var(--fd);font-weight:700;font-size:13px;color:var(--muted)}
+  .bar .bt{height:10px;border-radius:7px;background:rgba(17,20,28,.05);overflow:hidden}
+  .bar .bf{height:100%;width:0;border-radius:7px;transition:width 1.05s cubic-bezier(.22,1,.36,1)}
+  .bar.stack .bt{display:flex}
+  .bar.stack .bf{transition:width 1.05s cubic-bezier(.22,1,.36,1)}
+
+  /* timeline */
+  .timeline{display:flex;flex-direction:column}
+  .tl{display:flex;gap:13px;padding:12px 2px;border-bottom:1px solid var(--line-2)}
+  .tl:last-child{border-bottom:none}
+  .tl .tdot{width:9px;height:9px;border-radius:50%;margin-top:6px;flex:none}
+  .tl .tm{flex:1}
+  .tl .tt{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+  .tl .tp{font-weight:600;font-size:14px}
+  .tl .tg{font-size:11.5px;color:var(--muted-2);font-family:var(--fd);flex:none}
+  .tl .tr{font-size:12.5px;color:var(--muted);margin-top:2px}
+  .tag{font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:99px;font-family:var(--fd)}
+  .tag.no{background:var(--rose-soft);color:var(--rose)} .tag.yes{background:var(--emerald-soft);color:var(--emerald)}
+
+  /* recommendations */
+  .recos{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}
+  .reco{padding:18px;position:relative;overflow:hidden}
+  .reco::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px}
+  .reco.c1::before{background:var(--indigo)} .reco.c2::before{background:var(--violet)} .reco.c3::before{background:var(--sky)}
+  .reco .rk{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--indigo)}
+  .reco.c2 .rk{color:var(--violet)} .reco.c3 .rk{color:var(--sky)}
+  .reco .rb{font-size:14px;margin-top:8px;line-height:1.5}
+  .reco .rb b{font-weight:700}
+
+  /* ───────── FORM ───────── */
+  .form-wrap{display:grid;grid-template-columns:1.3fr .9fr;gap:18px;align-items:start}
+  .field{margin-bottom:16px}
+  .field label{display:block;font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:7px}
+  .field .req{color:var(--rose)}
+  .input,select,textarea{
+    width:100%;border:1px solid var(--line);border-radius:11px;padding:11px 13px;font-family:inherit;font-size:14px;color:var(--ink);
+    background:#fff;transition:.15s;
+  }
+  select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238A93A4' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;padding-right:34px}
+  .input:focus,select:focus,textarea:focus{outline:none;border-color:var(--indigo);box-shadow:0 0 0 3px rgba(79,70,229,.14)}
+  textarea{resize:vertical;min-height:84px}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .seg{display:flex;gap:8px}
+  .seg .so{
+    flex:1;text-align:center;border:1.4px solid var(--line);border-radius:11px;padding:12px;font-weight:600;font-size:13.5px;
+    background:#fff;transition:.15s;color:var(--muted);
+  }
+  .seg .so[data-v="Yes"].on{border-color:var(--emerald);background:var(--emerald-soft);color:var(--emerald)}
+  .seg .so[data-v="No"].on{border-color:var(--rose);background:var(--rose-soft);color:var(--rose)}
+  .reason-block{max-height:0;overflow:hidden;opacity:0;transition:max-height .4s ease,opacity .3s}
+  .reason-block.show{max-height:360px;opacity:1}
+  .form-aside .glass{padding:22px}
+  .form-aside h4{font-family:var(--fd);font-size:15px;font-weight:700;margin-bottom:6px}
+  .form-aside p{color:var(--muted);font-size:13.5px}
+  .form-aside ul{list-style:none;margin-top:14px;display:flex;flex-direction:column;gap:11px}
+  .form-aside li{display:flex;gap:10px;font-size:13.5px;color:var(--muted)}
+  .form-aside li svg{flex:none;color:var(--indigo);margin-top:2px}
+
+  /* success overlay */
+  .success{
+    position:fixed;inset:0;z-index:200;display:none;place-items:center;
+    background:rgba(20,18,40,.32);backdrop-filter:blur(6px);
+  }
+  .success.show{display:grid;animation:fade .3s}
+  .success .box{background:#fff;border-radius:22px;padding:38px 40px;text-align:center;box-shadow:var(--shadow-lg);max-width:360px}
+  .success .ring{width:78px;height:78px;margin:0 auto 18px}
+  .success h3{font-family:var(--fd);font-size:21px;font-weight:700}
+  .success p{color:var(--muted);font-size:14px;margin-top:7px}
+  .ckc{stroke:var(--emerald);stroke-width:3.5;fill:none;stroke-dasharray:166;stroke-dashoffset:166;animation:dc .5s .15s forwards ease}
+  .ckk{stroke:var(--emerald);stroke-width:4;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:48;stroke-dashoffset:48;animation:dc .35s .55s forwards ease}
+  @keyframes dc{to{stroke-dashoffset:0}}
+
+  /* ───────── DATABASE ───────── */
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+  .search{flex:1;min-width:200px;position:relative}
+  .search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted-2)}
+  .search input{padding-left:38px}
+  .toolbar select{width:auto;min-width:130px}
+  .tbl-wrap{overflow-x:auto;border-radius:var(--r)}
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  thead th{
+    text-align:left;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted-2);font-weight:700;
+    padding:13px 16px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--glass-2)
+  }
+  tbody td{padding:13px 16px;border-bottom:1px solid var(--line-2);white-space:nowrap}
+  tbody tr:hover{background:var(--indigo-soft)}
+  tbody tr:last-child td{border-bottom:none}
+  .cid{font-family:var(--fd);font-weight:700;color:var(--indigo)}
+  .muted{color:var(--muted)}
+  .db-foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:13px;color:var(--muted)}
+
+  /* funnel */
+  .funnel{display:flex;flex-direction:column;gap:10px}
+  .fn{position:relative;border-radius:12px;padding:14px 18px;color:#fff;display:flex;justify-content:space-between;align-items:center;font-weight:600}
+  .fn .fl{font-size:14px} .fn .fv{font-family:var(--fd);font-weight:800;font-size:18px}
+  .fn .fp{font-size:12px;opacity:.85;font-weight:500;margin-left:8px}
+
+  /* walkaway ranked cards */
+  .wa-list{display:flex;flex-direction:column;gap:14px}
+  .wa{display:grid;grid-template-columns:64px 1fr auto;gap:20px;align-items:center;padding:20px 22px}
+  .wa .rank{font-family:var(--fd);font-weight:800;font-size:40px;letter-spacing:-.03em;color:var(--indigo);opacity:.9;line-height:1}
+  .wa .wm h3{font-family:var(--fd);font-size:17px;font-weight:700}
+  .wa .wm .wact{color:var(--muted);font-size:13.5px;margin-top:6px;display:flex;gap:8px;align-items:flex-start}
+  .wa .wm .wact svg{flex:none;color:var(--amber);margin-top:2px}
+  .wa .wstat{text-align:right;min-width:120px}
+  .wa .wstat .wf{font-family:var(--fd);font-weight:800;font-size:22px}
+  .wa .wstat .wfl{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted-2);font-weight:700}
+  .wa .wstat .wbar{height:7px;border-radius:6px;background:rgba(17,20,28,.06);margin-top:9px;overflow:hidden}
+  .wa .wstat .wbf{height:100%;width:0;border-radius:6px;background:linear-gradient(90deg,var(--indigo),var(--violet));transition:width 1s cubic-bezier(.22,1,.36,1)}
+
+  /* AI cards */
+  .ai-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  .ai{padding:22px;position:relative;overflow:hidden}
+  .ai .glow{position:absolute;right:-30px;top:-30px;width:120px;height:120px;border-radius:50%;filter:blur(30px);opacity:.5}
+  .ai .ak{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--indigo)}
+  .ai .av{font-family:var(--fd);font-weight:700;font-size:20px;letter-spacing:-.02em;margin-top:12px;line-height:1.25}
+  .ai .av b{color:var(--indigo)}
+  .ai .ad{color:var(--muted);font-size:13.5px;margin-top:9px}
+
+  /* about */
+  .about-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;align-items:start}
+  .story p{color:var(--muted);font-size:15px;margin-top:12px}
+  .story h3{font-family:var(--fd);font-size:17px;font-weight:700;margin-top:22px}
+  .flow{display:flex;flex-direction:column;gap:0}
+  .flow .fs{display:flex;gap:13px;align-items:center;padding:11px 0}
+  .flow .fn-num{width:30px;height:30px;border-radius:9px;background:var(--indigo-soft);color:var(--indigo);display:grid;place-items:center;font-family:var(--fd);font-weight:700;font-size:13px;flex:none}
+  .flow .fs .ft{font-size:14px;font-weight:500}
+  .flow .conn{width:30px;display:flex;justify-content:center}
+  .flow .conn span{width:2px;height:14px;background:var(--line)}
+  .team{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+  .tm{display:flex;gap:11px;align-items:center;padding:13px;border:1px solid var(--line);border-radius:13px}
+  .tm .av2{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;color:#fff;font-family:var(--fd);font-weight:700;font-size:14px}
+  .tm .nm{font-size:13.5px;font-weight:600} .tm .rl{font-size:11.5px;color:var(--muted)}
+
+  .foot{max-width:1240px;margin:0 auto;padding:26px 22px;border-top:1px solid var(--line);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;color:var(--muted-2);font-size:13px}
+
+  /* toast */
+  .toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,20px);z-index:210;background:var(--ink);color:#fff;
+    padding:12px 20px;border-radius:13px;font-size:13.5px;font-weight:600;display:flex;gap:9px;align-items:center;opacity:0;pointer-events:none;transition:.3s;box-shadow:var(--shadow-lg)}
+  .toast svg{color:var(--emerald)}
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+
+  @media (max-width:880px){
+    .stat-row,.kpis,.feat,.recos,.ai-grid{grid-template-columns:1fr 1fr}
+    .grid-2,.form-wrap,.about-grid{grid-template-columns:1fr}
+    .wa{grid-template-columns:48px 1fr;gap:14px}
+    .wa .wstat{grid-column:1/-1;text-align:left}
+  }
+  @media (max-width:560px){
+    .stat-row,.kpis,.feat,.recos,.ai-grid,.team{grid-template-columns:1fr}
+    .nav-links{display:none}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<header class="nav">
+  <div class="nav-in">
+    <a class="logo" href="#" data-go="home"><span class="mark">W</span>WHY <b>NOT?</b></a>
+    <nav class="nav-links" id="navLinks">
+      <a data-nav="dashboard" data-go="dashboard">Dashboard</a>
+      <a data-nav="record" data-go="record">Record</a>
+      <a data-nav="database" data-go="database">Database</a>
+      <a data-nav="analytics" data-go="analytics">Analytics</a>
+      <a data-nav="walkaways" data-go="walkaways">Walkaways</a>
+      <a data-nav="ai" data-go="ai">AI Insights</a>
+      <a data-nav="about" data-go="about">About</a>
+    </nav>
+    <button class="btn" data-go="record">Record interaction</button>
+  </div>
+</header>
+
+<main>
+
+  <!-- ════ HOME / HERO ════ -->
+  <section class="view active" id="view-home">
+    <div class="hero">
+      <span class="pill"><span class="dot"></span>Customer Objection Intelligence</span>
+      <h1>Businesses analyze sales. <span class="grad">WHY NOT? analyzes lost sales.</span></h1>
+      <p class="sub">Transform customer rejections into actionable business intelligence — and start turning every <em>"no"</em> into <em>know</em>.</p>
+      <div class="cta">
+        <button class="btn" data-go="dashboard">Explore insights</button>
+        <button class="btn ghost" data-go="record">Record an interaction</button>
+      </div>
+    </div>
+
+    <div class="stat-row">
+      <div class="glass stat"><div class="ic" style="background:var(--indigo-soft);color:var(--indigo)">${ICN_people}</div><div class="v tnum" id="h-interactions">0</div><div class="l">Customer interactions</div></div>
+      <div class="glass stat"><div class="ic" style="background:var(--emerald-soft);color:var(--emerald)">${ICN_cart}</div><div class="v tnum" id="h-purchases" style="color:var(--emerald)">0</div><div class="l">Purchases</div></div>
+      <div class="glass stat"><div class="ic" style="background:var(--rose-soft);color:var(--rose)">${ICN_walk}</div><div class="v tnum" id="h-walkaways" style="color:var(--rose)">0</div><div class="l">Walkaways</div></div>
+      <div class="glass stat"><div class="ic" style="background:var(--indigo-soft);color:var(--indigo)">${ICN_pct}</div><div class="v tnum" id="h-conv">0%</div><div class="l">Conversion rate</div></div>
+    </div>
+
+    <div class="logos">
+      <p>Design language inspired by</p>
+      <div class="row"><span>Stripe</span><span>Notion</span><span>Linear</span><span>HubSpot</span><span>Airtable</span></div>
+    </div>
+
+    <div class="feat">
+      <div class="glass f"><div class="fi" style="background:var(--indigo-soft);color:var(--indigo)">${ICN_capture}</div><h3>Capture the "no"</h3><p>Reps log every walkaway in seconds — reason, product, and customer in one clean form.</p></div>
+      <div class="glass f"><div class="fi" style="background:var(--violet-soft,rgba(124,58,237,.1));color:var(--violet)">${ICN_chart}</div><h3>See the patterns</h3><p>Dashboards surface why customers leave, which products stall, and who actually buys.</p></div>
+      <div class="glass f"><div class="fi" style="background:var(--sky-soft,rgba(14,165,233,.1));color:var(--sky)">${ICN_spark}</div><h3>Act on it</h3><p>The insights engine turns objections into specific, revenue-recovering recommendations.</p></div>
+    </div>
+  </section>
+
+  <!-- ════ DASHBOARD ════ -->
+  <section class="view" id="view-dashboard">
+    <div class="page-head">
+      <span class="eyebrow">Executive dashboard</span>
+      <h2>The whole pipeline, at a glance</h2>
+      <p>Every metric below is computed live from your recorded interactions.</p>
+    </div>
+    <div class="kpis" id="dash-kpis"></div>
+    <div class="grid-2">
+      <div class="glass panel">
+        <div class="panel-head"><h3>${ICN_pie} Customer objections</h3><div class="ph-sub">Why customers walked away</div></div>
+        <div class="donut-wrap"><div class="donut" id="d-donut"></div><div class="legend" id="d-legend"></div></div>
+      </div>
+      <div class="glass panel">
+        <div class="panel-head"><h3>${ICN_bar} Revenue by product</h3><div class="ph-sub">Captured revenue from closed sales</div></div>
+        <div class="bars" id="d-revenue"></div>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="glass panel">
+        <div class="panel-head"><h3>${ICN_clock} Customer activity</h3><div class="ph-sub">Most recent interactions</div></div>
+        <div class="timeline" id="d-timeline"></div>
+      </div>
+      <div class="glass panel">
+        <div class="panel-head"><h3>${ICN_spark} Top recommendations</h3><div class="ph-sub">Generated from current patterns</div></div>
+        <div class="recos" id="d-recos" style="grid-template-columns:1fr;margin-top:0"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ RECORD ════ -->
+  <section class="view" id="view-record">
+    <div class="page-head">
+      <span class="eyebrow">Capture</span>
+      <h2>Record a customer interaction</h2>
+      <p>Log what happened — especially when the answer was no. It takes about fifteen seconds.</p>
+    </div>
+    <div class="form-wrap">
+      <div class="glass card-pad">
+        <div class="two">
+          <div class="field"><label>Customer ID</label><input class="input" id="f-id" placeholder="Auto-generated" disabled></div>
+          <div class="field"><label>Salesperson <span class="req">*</span></label>
+            <select id="f-rep"><option value="">Select…</option><option>Aarav K</option><option>Diya S</option><option>Rohan M</option><option>Meera P</option></select></div>
+        </div>
+        <div class="two">
+          <div class="field"><label>Age group <span class="req">*</span></label>
+            <select id="f-age"><option value="">Select…</option><option>18–25</option><option>26–35</option><option>36–50</option><option>50+</option></select></div>
+          <div class="field"><label>Gender</label>
+            <select id="f-gender"><option value="">Select…</option><option>Female</option><option>Male</option><option>Other</option></select></div>
+        </div>
+        <div class="field"><label>Product viewed <span class="req">*</span></label>
+          <select id="f-product"><option value="">Select…</option><option>Tangram</option><option>Orbit</option><option>Nimbus</option><option>Cedar</option><option>Pulse</option></select></div>
+        <div class="field"><label>Purchase decision <span class="req">*</span></label>
+          <div class="seg" id="f-decision"><button type="button" class="so" data-v="Yes">✓ Purchased</button><button type="button" class="so" data-v="No">✕ Walked away</button></div>
+        </div>
+        <div class="reason-block" id="f-reasonblock">
+          <div class="field"><label>Reason for rejection <span class="req">*</span></label>
+            <select id="f-reason"><option value="">Select…</option><option>Too Expensive</option><option>Not Needed</option><option>Already Own Similar Product</option><option>Need More Information</option><option>Lack of Trust</option></select></div>
+          <div class="field"><label>Customer notes</label><textarea id="f-notes" placeholder="e.g. Liked the product but wanted to compare prices first…"></textarea></div>
+        </div>
+        <button class="btn" style="width:100%;padding:13px;margin-top:6px" id="f-submit">Record insight</button>
+      </div>
+      <div class="form-aside">
+        <div class="glass">
+          <h4>Why we capture rejections</h4>
+          <p>Closed sales tell you what's working. Walkaways tell you what to fix — and that's where the revenue you're missing actually lives.</p>
+          <ul>
+            <li>${ICN_check}<span>Each entry feeds the dashboard and insights engine instantly.</span></li>
+            <li>${ICN_check}<span>Reasons are standardized so patterns are easy to spot.</span></li>
+            <li>${ICN_check}<span>Notes give context the charts can't.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ DATABASE ════ -->
+  <section class="view" id="view-database">
+    <div class="page-head">
+      <span class="eyebrow">Customer database</span>
+      <h2>Every interaction, searchable</h2>
+      <p>The single source of truth behind every chart in WHY NOT?.</p>
+    </div>
+    <div class="toolbar">
+      <div class="search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><input class="input" id="db-search" placeholder="Search ID, product, reason, salesperson…"></div>
+      <select id="db-product"><option value="">All products</option><option>Tangram</option><option>Orbit</option><option>Nimbus</option><option>Cedar</option><option>Pulse</option></select>
+      <select id="db-age"><option value="">All ages</option><option>18–25</option><option>26–35</option><option>36–50</option><option>50+</option></select>
+      <select id="db-status"><option value="">All decisions</option><option value="Yes">Purchased</option><option value="No">Walked away</option></select>
+      <select id="db-reason"><option value="">All objections</option><option>Too Expensive</option><option>Not Needed</option><option>Already Own Similar Product</option><option>Need More Information</option><option>Lack of Trust</option></select>
+      <button class="btn ghost" id="db-export">${ICN_down} Export CSV</button>
+    </div>
+    <div class="glass tbl-wrap">
+      <table>
+        <thead><tr><th>Customer ID</th><th>Date</th><th>Product</th><th>Decision</th><th>Reason</th><th>Age</th><th>Salesperson</th></tr></thead>
+        <tbody id="db-body"></tbody>
+      </table>
+    </div>
+    <div class="db-foot"><span id="db-count"></span><span>Showing live data · click Export for CSV</span></div>
+  </section>
+
+  <!-- ════ ANALYTICS ════ -->
+  <section class="view" id="view-analytics">
+    <div class="page-head">
+      <span class="eyebrow">Customer behavior analytics</span>
+      <h2>Understand the patterns</h2>
+      <p>Where customers drop off, who converts, and how much is left on the table.</p>
+    </div>
+    <div class="grid-2">
+      <div class="glass panel"><div class="panel-head"><h3>${ICN_pie} Objection breakdown</h3></div><div class="donut-wrap"><div class="donut" id="an-donut"></div><div class="legend" id="an-legend"></div></div></div>
+      <div class="glass panel"><div class="panel-head"><h3>${ICN_bar} Product conversion rate</h3></div><div class="bars" id="an-conv"></div></div>
+    </div>
+    <div class="grid-2">
+      <div class="glass panel"><div class="panel-head"><h3>${ICN_bar} Customer demographics</h3><div class="ph-sub">Purchased vs walked away, by age</div></div><div class="bars" id="an-demo"></div>
+        <div style="display:flex;gap:18px;margin-top:14px;font-size:12px;color:var(--muted)"><span><i style="display:inline-block;width:9px;height:9px;border-radius:3px;background:var(--emerald);margin-right:6px"></i>Purchased</span><span><i style="display:inline-block;width:9px;height:9px;border-radius:3px;background:var(--rose);margin-right:6px"></i>Walked away</span></div>
+      </div>
+      <div class="glass panel"><div class="panel-head"><h3>${ICN_pct} Age group purchase analysis</h3></div><div class="bars" id="an-age"></div></div>
+    </div>
+    <div class="grid-2">
+      <div class="glass panel"><div class="panel-head"><h3>${ICN_money} Lost revenue analysis</h3><div class="ph-sub">Walkaway value by product</div></div><div class="bars" id="an-lost"></div></div>
+      <div class="glass panel"><div class="panel-head"><h3>${ICN_funnel} Conversion funnel</h3></div><div class="funnel" id="an-funnel"></div></div>
+    </div>
+    <div class="glass panel" style="margin-top:16px"><div class="panel-head"><h3>${ICN_spark} Insights panel</h3></div><div class="recos" id="an-insights" style="margin-top:0"></div></div>
+  </section>
+
+  <!-- ════ WALKAWAYS ════ -->
+  <section class="view" id="view-walkaways">
+    <div class="page-head">
+      <span class="eyebrow">The core question</span>
+      <h2>Why customers walk away</h2>
+      <p>The reasons behind every lost sale, ranked — each paired with a move to win the next one.</p>
+    </div>
+    <div class="wa-list" id="wa-list"></div>
+  </section>
+
+  <!-- ════ AI INSIGHTS ════ -->
+  <section class="view" id="view-ai">
+    <div class="page-head">
+      <span class="eyebrow">Insights engine</span>
+      <h2>What the data is telling you</h2>
+      <p>Automatically generated business intelligence from your objection data.</p>
+    </div>
+    <div class="ai-grid" id="ai-cards"></div>
+  </section>
+
+  <!-- ════ ABOUT ════ -->
+  <section class="view" id="view-about">
+    <div class="page-head">
+      <span class="eyebrow">About the project</span>
+      <h2>Turning "No" into Know</h2>
+    </div>
+    <div class="about-grid">
+      <div class="glass card-pad story">
+        <p>We discovered this problem during the <b>Mandi field immersion exercise</b>. Watching real vendors and customers, one gap stood out: businesses obsess over the sales they win, but almost never study the ones they lose.</p>
+        <h3>The problem</h3>
+        <p>Businesses track successful sales but rarely analyze customer rejections — so the single richest source of improvement walks out the door unrecorded.</p>
+        <h3>The solution</h3>
+        <p>WHY NOT? captures customer objections at the moment they happen and transforms them into actionable business intelligence: clear patterns, ranked reasons, and concrete recommendations a small team can act on the same day.</p>
+        <h3>The team</h3>
+        <div class="team">
+          <div class="tm"><div class="av2" style="background:linear-gradient(145deg,var(--indigo),var(--violet))">A</div><div><div class="nm">Your Name</div><div class="rl">Product &amp; Research</div></div></div>
+          <div class="tm"><div class="av2" style="background:linear-gradient(145deg,var(--violet),var(--sky))">B</div><div><div class="nm">Team Member</div><div class="rl">Data &amp; Analytics</div></div></div>
+          <div class="tm"><div class="av2" style="background:linear-gradient(145deg,var(--sky),var(--emerald))">C</div><div><div class="nm">Team Member</div><div class="rl">Design &amp; Frontend</div></div></div>
+          <div class="tm"><div class="av2" style="background:linear-gradient(145deg,var(--emerald),var(--indigo))">D</div><div><div class="nm">Team Member</div><div class="rl">Field &amp; Interviews</div></div></div>
+        </div>
+      </div>
+      <div class="glass card-pad">
+        <h4 style="font-family:var(--fd);font-size:15px;font-weight:700;margin-bottom:6px">How it works</h4>
+        <p style="color:var(--muted);font-size:13.5px;margin-bottom:8px">From a single conversation to a better decision.</p>
+        <div class="flow" id="about-flow"></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot"><span>WHY NOT? — Turning "No" into Know</span><span>Built for the Mandi field immersion · ${YEAR}</span></footer>
+
+<!-- success + toast -->
+<div class="success" id="success"><div class="box">
+  <svg class="ring" viewBox="0 0 60 60"><circle class="ckc" cx="30" cy="30" r="26"/><path class="ckk" d="M19 31l8 8 15-17"/></svg>
+  <h3>Customer insight recorded</h3><p>It's now part of your live dashboard and analytics.</p>
+</div></div>
+<div class="toast" id="toast"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span id="toast-msg"></span></div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ───── icons (inline SVG strings) ───── */
+  var I = {
+    people:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9"/><path d="M16 3.1a4 4 0 0 1 0 7.8"/></svg>',
+    cart:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.5 3h2l2.6 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21.5 7H6"/></svg>',
+    walk:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 4a2 2 0 1 0 0-.01"/><path d="m9 20 2-5 2 2 1 3"/><path d="m6 9 3-1 2 3 3 1"/><path d="m16 22-2-6"/></svg>',
+    pct:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 5 5 19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>',
+    money:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 9h4.5a1.5 1.5 0 0 1 0 3H9m0 0h4.5a1.5 1.5 0 0 1 0 3H9m1.5-9V6m0 12v-1.5"/></svg>',
+    flag:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><path d="M4 22v-7"/></svg>',
+    pie:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--indigo)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12A9 9 0 1 1 12 3v9z"/><path d="M21 12A9 9 0 0 0 12 3v9z" opacity=".4"/></svg>',
+    bar:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--indigo)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="6"/><rect x="12" y="7" width="3" height="10"/><rect x="17" y="13" width="3" height="4"/></svg>',
+    clock:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--indigo)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+    spark:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg>',
+    funnel:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--indigo)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h18l-7 8v6l-4 2v-8z"/></svg>',
+    check:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>',
+    down:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>',
+    capture:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>',
+    chart:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 14 3-4 3 3 4-6"/></svg>'
+  };
+  /* inject icons into the static HTML placeholders */
+  document.body.innerHTML = document.body.innerHTML
+    .replace(/\$\{ICN_people\}/g,I.people).replace(/\$\{ICN_cart\}/g,I.cart).replace(/\$\{ICN_walk\}/g,I.walk)
+    .replace(/\$\{ICN_pct\}/g,I.pct).replace(/\$\{ICN_money\}/g,I.money).replace(/\$\{ICN_pie\}/g,I.pie)
+    .replace(/\$\{ICN_bar\}/g,I.bar).replace(/\$\{ICN_clock\}/g,I.clock).replace(/\$\{ICN_spark\}/g,I.spark)
+    .replace(/\$\{ICN_funnel\}/g,I.funnel).replace(/\$\{ICN_check\}/g,I.check).replace(/\$\{ICN_down\}/g,I.down)
+    .replace(/\$\{ICN_capture\}/g,I.capture).replace(/\$\{ICN_chart\}/g,I.chart)
+    .replace(/\$\{YEAR\}/g,new Date().getFullYear());
+
+  /* ───── domain ───── */
+  var PRODUCTS = [
+    {name:'Tangram',price:1499,color:'#4F46E5'},
+    {name:'Orbit',  price:2999,color:'#7C3AED'},
+    {name:'Nimbus', price:899, color:'#2563EB'},
+    {name:'Cedar',  price:1999,color:'#0EA5E9'},
+    {name:'Pulse',  price:1299,color:'#0891B2'}
+  ];
+  var PRICE = {}; PRODUCTS.forEach(function(p){PRICE[p.name]=p.price;});
+  var PCOLOR= {}; PRODUCTS.forEach(function(p){PCOLOR[p.name]=p.color;});
+  var REASONS = [
+    {r:'Too Expensive',color:'#4F46E5',action:'Introduce bundled offers or a limited-time discount tier.'},
+    {r:'Not Needed',color:'#7C3AED',action:'Tighten targeting so reps spend time with high-intent customers.'},
+    {r:'Already Own Similar Product',color:'#2563EB',action:'Lead with trade-in incentives and a clear point of difference.'},
+    {r:'Need More Information',color:'#0EA5E9',action:'Equip reps with a one-page explainer and a 60-second demo.'},
+    {r:'Lack of Trust',color:'#F59E0B',action:'Surface reviews, guarantees and certifications at the point of sale.'}
+  ];
+  var RCOLOR={},RACT={}; REASONS.forEach(function(x){RCOLOR[x.r]=x.color;RACT[x.r]=x.action;});
+  var REPS=['Aarav K','Diya S','Rohan M','Meera P'];
+
+  var seed = [
+    ['Tangram','Yes',null,'18–25','Female'],['Tangram','Yes',null,'26–35','Male'],
+    ['Tangram','Yes',null,'18–25','Female'],['Tangram','Yes',null,'36–50','Male'],
+    ['Nimbus','Yes',null,'18–25','Female'],['Nimbus','Yes',null,'26–35','Male'],
+    ['Pulse','Yes',null,'18–25','Male'],['Pulse','Yes',null,'26–35','Female'],
+    ['Cedar','Yes',null,'36–50','Male'],['Cedar','Yes',null,'26–35','Female'],
+    ['Orbit','Yes',null,'26–35','Male'],['Nimbus','Yes',null,'18–25','Female'],
+    ['Orbit','No','Too Expensive','36–50','Male'],['Orbit','No','Too Expensive','50+','Male'],
+    ['Cedar','No','Too Expensive','36–50','Female'],['Pulse','No','Too Expensive','36–50','Male'],
+    ['Nimbus','No','Too Expensive','26–35','Female'],['Orbit','No','Too Expensive','26–35','Male'],
+    ['Nimbus','No','Not Needed','50+','Male'],['Cedar','No','Not Needed','50+','Female'],
+    ['Pulse','No','Not Needed','50+','Male'],['Tangram','No','Not Needed','50+','Female'],
+    ['Cedar','No','Already Own Similar Product','50+','Male'],['Orbit','No','Already Own Similar Product','36–50','Female'],
+    ['Nimbus','No','Already Own Similar Product','36–50','Male'],['Pulse','No','Need More Information','26–35','Female'],
+    ['Tangram','No','Need More Information','36–50','Male'],['Orbit','No','Need More Information','18–25','Male'],
+    ['Cedar','No','Lack of Trust','26–35','Male'],['Pulse','No','Lack of Trust','36–50','Female']
+  ];
+  var data = seed.map(function(s,i){
+    var d=new Date(); d.setDate(d.getDate()-(seed.length-i));
+    return {id:'WN-'+String(i+1).padStart(3,'0'),product:s[0],decision:s[1],reason:s[2],age:s[3],gender:s[4],
+            notes:'',rep:REPS[i%REPS.length],date:d};
+  });
+
+  /* ───── helpers ───── */
+  var $=function(s,el){return (el||document).querySelector(s);};
+  var pct=function(n,d){return d?Math.round(n/d*100):0;};
+  var inr=function(n){return '₹'+Number(n).toLocaleString('en-IN');};
+  var fmtDate=function(d){return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short'});};
+  function countBy(arr,key){var o={};arr.forEach(function(x){var k=typeof key==='function'?key(x):x[key];if(k==null)return;o[k]=(o[k]||0)+1;});return o;}
+
+  function metrics(){
+    var total=data.length, yes=data.filter(function(d){return d.decision==='Yes';}), no=data.filter(function(d){return d.decision==='No';});
+    var captured=yes.reduce(function(s,d){return s+PRICE[d.product];},0);
+    var lost=no.reduce(function(s,d){return s+PRICE[d.product];},0);
+    var oc=countBy(no,'reason');
+    var topObj=Object.keys(oc).sort(function(a,b){return oc[b]-oc[a];})[0]||'—';
+    return {total:total,yes:yes,no:no,nYes:yes.length,nNo:no.length,conv:pct(yes.length,total),
+            captured:captured,lost:lost,oc:oc,topObj:topObj};
+  }
+  function byProduct(){
+    return PRODUCTS.map(function(p){
+      var rows=data.filter(function(d){return d.product===p.name;});
+      var y=rows.filter(function(d){return d.decision==='Yes';}).length;
+      var lost=rows.filter(function(d){return d.decision==='No';}).reduce(function(s,d){return s+p.price;},0);
+      return {name:p.name,color:p.color,price:p.price,total:rows.length,yes:y,rate:pct(y,rows.length),
+              captured:y*p.price,lost:lost};
+    });
+  }
+  var AGES=['18–25','26–35','36–50','50+'];
+  function byAge(){
+    return AGES.map(function(a){
+      var rows=data.filter(function(d){return d.age===a;});
+      var y=rows.filter(function(d){return d.decision==='Yes';}).length;
+      return {age:a,total:rows.length,yes:y,no:rows.length-y,rate:pct(y,rows.length)};
+    });
+  }
+
+  function animateNum(el,target,suffix){
+    if(!el)return; suffix=suffix||'';
+    var t0=performance.now(),dur=900;
+    function step(now){var p=Math.min((now-t0)/dur,1),e=1-Math.pow(1-p,3);el.textContent=Math.round(target*e)+suffix;if(p<1)requestAnimationFrame(step);}
+    requestAnimationFrame(step);
+  }
+  function donutSVG(segs,size,thick){
+    size=size||172;thick=thick||26;
+    var r=(size-thick)/2,c=2*Math.PI*r,cx=size/2,off=0,total=segs.reduce(function(s,x){return s+x.value;},0)||1;
+    var s='<svg width="'+size+'" height="'+size+'" viewBox="0 0 '+size+' '+size+'"><g transform="rotate(-90 '+cx+' '+cx+')">';
+    s+='<circle cx="'+cx+'" cy="'+cx+'" r="'+r+'" fill="none" stroke="rgba(17,20,28,.05)" stroke-width="'+thick+'"/>';
+    segs.forEach(function(seg){
+      var len=seg.value/total*c;
+      s+='<circle cx="'+cx+'" cy="'+cx+'" r="'+r+'" fill="none" stroke="'+seg.color+'" stroke-width="'+thick+'" stroke-dasharray="'+len+' '+(c-len)+'" stroke-dashoffset="'+(-off)+'"/>';
+      off+=len;
+    });
+    return s+'</g></svg>';
+  }
+  function barRows(rows){ /* rows: {name,val,disp,pct,color} */
+    return '<div class="bars">'+rows.map(function(b){
+      return '<div class="bar"><div class="bh"><span class="bn">'+b.name+'</span><span class="bv">'+b.disp+'</span></div>'+
+             '<div class="bt"><div class="bf" style="background:'+(b.color||'var(--indigo)')+'" data-w="'+b.pct+'"></div></div></div>';
+    }).join('')+'</div>';
+  }
+  function animateBars(host){
+    setTimeout(function(){
+      Array.prototype.forEach.call(host.querySelectorAll('.bf'),function(f,i){
+        setTimeout(function(){f.style.width=f.getAttribute('data-w')+'%';},i*70);
+      });
+    },40);
+  }
+
+  /* ───── renderers ───── */
+  function renderHero(){
+    var m=metrics();
+    animateNum($('#h-interactions'),m.total);
+    animateNum($('#h-purchases'),m.nYes);
+    animateNum($('#h-walkaways'),m.nNo);
+    animateNum($('#h-conv'),m.conv,'%');
+  }
+
+  function renderDashboard(){
+    var m=metrics();
+    var kpis=[
+      {k:'Customer interactions',v:m.total,ic:I.people,bg:'var(--indigo-soft)',col:'var(--indigo)',meta:'all recorded',mc:'mut'},
+      {k:'Purchases',v:m.nYes,ic:I.cart,bg:'var(--emerald-soft)',col:'var(--emerald)',meta:'closed sales',mc:'pos'},
+      {k:'Walkaways',v:m.nNo,ic:I.walk,bg:'var(--rose-soft)',col:'var(--rose)',meta:'opportunities to recover',mc:'neg'},
+      {k:'Conversion rate',v:m.conv+'%',ic:I.pct,bg:'var(--indigo-soft)',col:'var(--indigo)',meta:'of all interactions',mc:'mut'},
+      {k:'Revenue captured',v:inr(m.captured),ic:I.money,bg:'var(--emerald-soft)',col:'var(--emerald)',meta:inr(m.lost)+' lost',mc:'neg'},
+      {k:'Top objection',v:m.topObj,ic:I.flag,bg:'var(--amber-soft)',col:'var(--amber)',meta:pct(m.oc[m.topObj],m.nNo)+'% of walkaways',mc:'mut',small:true}
+    ];
+    $('#dash-kpis').innerHTML=kpis.map(function(x){
+      return '<div class="glass kpi"><div class="top"><span class="k">'+x.k+'</span><span class="ic" style="background:'+x.bg+';color:'+x.col+'">'+x.ic+'</span></div>'+
+        '<div class="v" style="'+(x.small?'font-size:20px;':'')+(x.col&&x.k!=="Top objection"?'':'')+'">'+x.v+'</div>'+
+        '<div class="meta '+x.mc+'">'+x.meta+'</div></div>';
+    }).join('');
+
+    // objection donut
+    var segs=REASONS.map(function(x){return {label:x.r,value:m.oc[x.r]||0,color:x.color};}).filter(function(s){return s.value>0;});
+    $('#d-donut').innerHTML=donutSVG(segs)+'<div class="mid"><span class="n tnum">'+m.nNo+'</span><span class="t">Walkaways</span></div>';
+    $('#d-legend').innerHTML=segs.map(function(s){
+      return '<div class="li"><span class="sw" style="background:'+s.color+'"></span><span class="ln">'+s.label+'</span><span class="lv">'+pct(s.value,m.nNo)+'%</span></div>';
+    }).join('');
+
+    // revenue by product
+    var bp=byProduct(), maxRev=Math.max.apply(null,bp.map(function(b){return b.captured;}))||1;
+    var rev=$('#d-revenue'); rev.innerHTML=barRows(bp.slice().sort(function(a,b){return b.captured-a.captured;}).map(function(b){
+      return {name:b.name,disp:inr(b.captured),pct:Math.round(b.captured/maxRev*100),color:b.color};
+    })).replace(/^<div class="bars">|<\/div>$/g,''); animateBars(rev);
+
+    // timeline
+    $('#d-timeline').innerHTML=data.slice().sort(function(a,b){return b.date-a.date;}).slice(0,6).map(function(d){
+      var no=d.decision==='No';
+      return '<div class="tl"><span class="tdot" style="background:'+(no?'var(--rose)':'var(--emerald)')+'"></span>'+
+        '<div class="tm"><div class="tt"><span class="tp">'+d.product+'</span><span class="tg">'+fmtDate(d.date)+'</span></div>'+
+        '<div class="tr">'+(no?d.reason:'Closed the sale')+' · '+d.age+' · '+d.rep+'</div></div>'+
+        '<span class="tag '+(no?'no':'yes')+'">'+(no?'NO':'YES')+'</span></div>';
+    }).join('');
+
+    // recommendations
+    var bestP=bp.slice().sort(function(a,b){return b.rate-a.rate;})[0];
+    var ba=byAge().slice().sort(function(a,b){return b.rate-a.rate;})[0];
+    var recos=[
+      {c:'c1',k:'Pricing',b:'<b>'+pct(m.oc['Too Expensive']||0,m.nNo)+'% of walkaways</b> cite price. '+RACT['Too Expensive']},
+      {c:'c2',k:'What works',b:'<b>'+bestP.name+'</b> converts best at <b>'+bestP.rate+'%</b> — open demos with it.'},
+      {c:'c3',k:'Audience',b:'Buyers aged <b>'+ba.age+'</b> show the strongest intent ('+ba.rate+'%). Prioritise them.'}
+    ];
+    $('#d-recos').innerHTML=recos.map(function(r){return '<div class="glass reco '+r.c+'"><div class="rk">'+r.k+'</div><div class="rb">'+r.b+'</div></div>';}).join('');
+  }
+
+  function renderAnalytics(){
+    var m=metrics(),bp=byProduct(),ba=byAge();
+    var segs=REASONS.map(function(x){return {label:x.r,value:m.oc[x.r]||0,color:x.color};}).filter(function(s){return s.value>0;});
+    $('#an-donut').innerHTML=donutSVG(segs)+'<div class="mid"><span class="n tnum">'+m.nNo+'</span><span class="t">Objections</span></div>';
+    $('#an-legend').innerHTML=segs.map(function(s){return '<div class="li"><span class="sw" style="background:'+s.color+'"></span><span class="ln">'+s.label+'</span><span class="lv">'+s.value+'</span></div>';}).join('');
+
+    var conv=$('#an-conv'); conv.innerHTML=barRows(bp.slice().sort(function(a,b){return b.rate-a.rate;}).map(function(b){
+      return {name:b.name,disp:b.rate+'%',pct:b.rate,color:b.rate>=50?'var(--emerald)':b.color};})).replace(/^<div class="bars">|<\/div>$/g,''); animateBars(conv);
+
+    // demographics stacked (purchased vs walked, by age)
+    var maxAge=Math.max.apply(null,ba.map(function(a){return a.total;}))||1;
+    var demo=$('#an-demo');
+    demo.innerHTML=ba.map(function(a){
+      var wy=a.total?Math.round(a.yes/maxAge*100):0, wn=a.total?Math.round(a.no/maxAge*100):0;
+      return '<div class="bar stack"><div class="bh"><span class="bn">'+a.age+'</span><span class="bv">'+a.total+' total</span></div>'+
+        '<div class="bt"><div class="bf" style="background:var(--emerald)" data-w="'+wy+'"></div><div class="bf" style="background:var(--rose)" data-w="'+wn+'"></div></div></div>';
+    }).join(''); animateBars(demo);
+
+    var age=$('#an-age'); age.innerHTML=barRows(ba.map(function(a){
+      return {name:a.age,disp:a.rate+'%  ('+a.yes+'/'+a.total+')',pct:a.rate,color:'linear-gradient(90deg,var(--indigo),var(--violet))'};})).replace(/^<div class="bars">|<\/div>$/g,''); animateBars(age);
+
+    var maxLost=Math.max.apply(null,bp.map(function(b){return b.lost;}))||1;
+    var lost=$('#an-lost'); lost.innerHTML=barRows(bp.slice().sort(function(a,b){return b.lost-a.lost;}).map(function(b){
+      return {name:b.name,disp:inr(b.lost),pct:Math.round(b.lost/maxLost*100),color:'var(--rose)'};})).replace(/^<div class="bars">|<\/div>$/g,''); animateBars(lost);
+
+    // funnel
+    var interest=m.total-(m.oc['Not Needed']||0);
+    var consider=interest-(m.oc['Need More Information']||0);
+    var steps=[{l:'Interaction',v:m.total},{l:'Interest',v:interest},{l:'Consideration',v:consider},{l:'Purchase',v:m.nYes}];
+    var cols=['#4F46E5','#6366F1','#818CF8','#059669'];
+    $('#an-funnel').innerHTML=steps.map(function(s,i){
+      var w=30+ (s.v/m.total)*70;
+      return '<div class="fn" style="width:'+w+'%;background:linear-gradient(135deg,'+cols[i]+',rgba(0,0,0,.06))">'+
+        '<span class="fl">'+s.l+'<span class="fp">'+pct(s.v,m.total)+'%</span></span><span class="fv">'+s.v+'</span></div>';
+    }).join('');
+
+    var bestP=bp.slice().sort(function(a,b){return b.rate-a.rate;})[0];
+    var ins=[
+      {c:'c1',k:'Pricing',b:'Price is the single largest objection — <b>'+pct(m.oc['Too Expensive']||0,m.nNo)+'%</b> of all walkaways.'},
+      {c:'c2',k:'Lost revenue',b:'<b>'+inr(m.lost)+'</b> in potential revenue walked away versus <b>'+inr(m.captured)+'</b> captured.'},
+      {c:'c3',k:'Best converter',b:'<b>'+bestP.name+'</b> leads conversion at <b>'+bestP.rate+'%</b>; weakest products drag the average down.'}
+    ];
+    $('#an-insights').innerHTML=ins.map(function(r){return '<div class="glass reco '+r.c+'"><div class="rk">'+r.k+'</div><div class="rb">'+r.b+'</div></div>';}).join('');
+  }
+
+  function renderWalkaways(){
+    var m=metrics();
+    var ranked=REASONS.map(function(x){return {r:x.r,n:m.oc[x.r]||0,action:x.action};})
+      .sort(function(a,b){return b.n-a.n;});
+    var maxN=ranked[0]?ranked[0].n:1;
+    var host=$('#wa-list');
+    host.innerHTML=ranked.map(function(x,i){
+      return '<div class="glass wa"><div class="rank">#'+(i+1)+'</div>'+
+        '<div class="wm"><h3>'+x.r+'</h3><div class="wact">'+I.spark.replace('var(--indigo)','currentColor')+
+        '<span><b style="color:var(--ink)">Suggested action — </b>'+x.action+'</span></div></div>'+
+        '<div class="wstat"><div class="wf">'+x.n+'</div><div class="wfl">customers · '+pct(x.n,m.nNo)+'%</div>'+
+        '<div class="wbar"><div class="wbf" data-w="'+Math.round(x.n/maxN*100)+'"></div></div></div></div>';
+    }).join('');
+    setTimeout(function(){Array.prototype.forEach.call(host.querySelectorAll('.wbf'),function(f,i){setTimeout(function(){f.style.width=f.getAttribute('data-w')+'%';},i*90);});},50);
+  }
+
+  function renderAI(){
+    var m=metrics(),bp=byProduct(),ba=byAge();
+    var bestP=bp.slice().sort(function(a,b){return b.rate-a.rate;})[0];
+    var bestA=ba.slice().sort(function(a,b){return b.rate-a.rate;})[0];
+    var recover=Math.round(m.lost*0.2);
+    var cards=[
+      {glow:'var(--indigo)',k:'Pricing signal',v:'<b>'+pct(m.oc['Too Expensive']||0,m.nNo)+'%</b> of customers cited price concerns.',d:'Pricing is your top objection. Test a starter tier or bundle to lower the entry barrier.'},
+      {glow:'var(--emerald)',k:'Top performer',v:'<b>'+bestP.name+'</b> has the highest conversion rate, at '+bestP.rate+'%.',d:'Use it as the lead product in demos to build early momentum and trust.'},
+      {glow:'var(--violet)',k:'Audience intent',v:'Customers aged <b>'+bestA.age+'</b> show the strongest purchase intent.',d:'Tailor messaging and follow-ups toward this group to lift overall conversion.'},
+      {glow:'var(--amber)',k:'Emerging risk',v:'<b>Trust-related</b> objections are worth watching closely.',d:'Reviews, guarantees and certifications at the point of sale can blunt this early.'},
+      {glow:'var(--sky)',k:'Recovery potential',v:'Follow-up campaigns may recover <b>~20%</b> of lost sales.',d:'That is roughly '+inr(recover)+' in winnable revenue from this dataset alone.'},
+      {glow:'var(--rose)',k:'Revenue at risk',v:'<b>'+inr(m.lost)+'</b> walked out the door unrecorded — until now.',d:'Every logged objection narrows the gap between interest and income.'}
+    ];
+    $('#ai-cards').innerHTML=cards.map(function(c){
+      return '<div class="glass ai"><div class="glow" style="background:'+c.glow+'"></div>'+
+        '<div class="ak" style="color:'+c.glow+'">'+I.spark+'Insight</div>'+
+        '<div class="av">'+c.v+'</div><div class="ad">'+c.d+'</div></div>';
+    }).join('');
+  }
+
+  /* ───── database ───── */
+  function renderDatabase(){
+    var q=($('#db-search').value||'').toLowerCase();
+    var fp=$('#db-product').value, fa=$('#db-age').value, fs=$('#db-status').value, fr=$('#db-reason').value;
+    var rows=data.filter(function(d){
+      if(fp&&d.product!==fp)return false;
+      if(fa&&d.age!==fa)return false;
+      if(fs&&d.decision!==fs)return false;
+      if(fr&&d.reason!==fr)return false;
+      if(q){var hay=(d.id+' '+d.product+' '+(d.reason||'')+' '+d.rep+' '+d.age).toLowerCase();if(hay.indexOf(q)<0)return false;}
+      return true;
+    }).sort(function(a,b){return b.date-a.date;});
+    $('#db-body').innerHTML=rows.map(function(d){
+      var no=d.decision==='No';
+      return '<tr><td class="cid">'+d.id+'</td><td class="muted">'+fmtDate(d.date)+'</td><td>'+d.product+'</td>'+
+        '<td><span class="tag '+(no?'no':'yes')+'">'+(no?'Walked away':'Purchased')+'</span></td>'+
+        '<td class="muted">'+(d.reason||'—')+'</td><td class="muted">'+d.age+'</td><td>'+d.rep+'</td></tr>';
+    }).join('') || '<tr><td colspan="7" style="padding:30px;text-align:center;color:var(--muted-2)">No interactions match these filters.</td></tr>';
+    $('#db-count').textContent=rows.length+' of '+data.length+' interactions';
+  }
+  function exportCSV(){
+    var head=['Customer ID','Date','Product','Decision','Reason','Age Group','Gender','Salesperson','Notes'];
+    var lines=[head.join(',')].concat(data.map(function(d){
+      return [d.id,d.date.toISOString().slice(0,10),d.product,d.decision,(d.reason||''),d.age,d.gender,d.rep,(d.notes||'').replace(/[",\n]/g,' ')]
+        .map(function(c){return '"'+String(c).replace(/"/g,'""')+'"';}).join(',');
+    }));
+    var blob=new Blob([lines.join('\n')],{type:'text/csv'});
+    var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='why-not-interactions.csv'; a.click();
+    toast('CSV exported');
+  }
+
+  function renderAbout(){
+    var steps=['Customer interaction','Salesperson records objection','Data stored in database','Analytics engine processes data','Dashboard generates insights','Business makes better decisions'];
+    $('#about-flow').innerHTML=steps.map(function(s,i){
+      return '<div class="fs"><span class="fn-num">'+(i+1)+'</span><span class="ft">'+s+'</span></div>'+
+        (i<steps.length-1?'<div class="conn"><span></span></div>':'');
+    }).join('');
+  }
+
+  /* ───── navigation ───── */
+  function show(v){
+    document.querySelectorAll('.view').forEach(function(x){x.classList.toggle('active',x.id==='view-'+v);});
+    document.querySelectorAll('[data-nav]').forEach(function(x){x.classList.toggle('active',x.getAttribute('data-nav')===v);});
+    window.scrollTo({top:0,behavior:'smooth'});
+    if(v==='home')renderHero();
+    if(v==='dashboard')renderDashboard();
+    if(v==='analytics')renderAnalytics();
+    if(v==='walkaways')renderWalkaways();
+    if(v==='ai')renderAI();
+    if(v==='database')renderDatabase();
+  }
+  document.addEventListener('click',function(e){
+    var t=e.target.closest('[data-go]'); if(t){e.preventDefault();show(t.getAttribute('data-go'));}
+  });
+
+  /* ───── record form ───── */
+  var sel={decision:null};
+  document.querySelectorAll('#f-decision .so').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('#f-decision .so').forEach(function(x){x.classList.remove('on');});
+      b.classList.add('on'); sel.decision=b.getAttribute('data-v');
+      $('#f-reasonblock').classList.toggle('show',sel.decision==='No');
+    });
+  });
+  $('#f-submit').addEventListener('click',function(){
+    var rep=$('#f-rep').value, age=$('#f-age').value, product=$('#f-product').value;
+    var reason=$('#f-reason').value, notes=$('#f-notes').value, gender=$('#f-gender').value;
+    if(!rep||!age||!product||!sel.decision||(sel.decision==='No'&&!reason)){toast('Please complete the required fields');return;}
+    var d=new Date();
+    data.push({id:'WN-'+String(data.length+1).padStart(3,'0'),product:product,decision:sel.decision,
+      reason:sel.decision==='No'?reason:null,age:age,gender:gender||'—',notes:notes,rep:rep,date:d});
+    // reset
+    ['f-rep','f-age','f-product','f-reason','f-gender'].forEach(function(id){$('#'+id).value='';});
+    $('#f-notes').value=''; sel.decision=null;
+    document.querySelectorAll('#f-decision .so').forEach(function(x){x.classList.remove('on');});
+    $('#f-reasonblock').classList.remove('show');
+    // success
+    var ok=$('#success'); ok.classList.add('show');
+    setTimeout(function(){ok.classList.remove('show');show('dashboard');},1700);
+  });
+
+  /* ───── database listeners ───── */
+  ['db-search','db-product','db-age','db-status','db-reason'].forEach(function(id){
+    var el=$('#'+id); el.addEventListener(id==='db-search'?'input':'change',renderDatabase);
+  });
+  $('#db-export').addEventListener('click',exportCSV);
+
+  /* ───── toast ───── */
+  var tTimer;
+  function toast(msg){var t=$('#toast');$('#toast-msg').textContent=msg;t.classList.add('show');clearTimeout(tTimer);tTimer=setTimeout(function(){t.classList.remove('show');},2200);}
+
+  /* init */
+  renderAbout();
+  show('home');
+})();
+</script>
+</body>
+</html>
+E html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WHY NOT? — Turning "No" into Know</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FFFFFF;
+    --ink:#0E1116;
+    --muted:#5B6473;
+    --muted-2:#8A93A4;
+    --line:rgba(17,20,28,.08);
+    --line-2:rgba(17,20,28,.06);
+    --indigo:#4F46E5;
+    --indigo-700:#4338CA;
+    --violet:#7C3AED;
+    --blue:#2563EB;
+    --sky:#0EA5E9;
+    --cyan:#0891B2;
+    --emerald:#059669;
+    --amber:#F59E0B;
+    --rose:#E11D48;
+    --indigo-soft:rgba(79,70,229,.08);
+    --emerald-soft:rgba(5,150,105,.10);
+    --rose-soft:rgba(225,29,72,.10);
+    --amber-soft:rgba(245,158,11,.12);
+    --glass:rgba(255,255,255,.72);
+    --glass-2:rgba(255,255,255,.55);
+    --glass-brd:rgba(255,255,255,.7);
+    --shadow-sm:0 1px 2px rgba(17,20,28,.06), 0 1px 3px rgba(17,20,28,.05);
+    --shadow:0 6px 16px -8px rgba(17,20,28,.14), 0 2px 6px -4px rgba(17,20,28,.08);
+    --shadow-lg:0 24px 60px -28px rgba(40,38,90,.32), 0 8px 24px -16px rgba(17,20,28,.14);
+    --r:18px;
+    --fd:"Inter Tight",system-ui,sans-serif;
+    --fb:"Inter",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--fb);color:var(--ink);background:var(--bg);
+    line-height:1.5;-webkit-font-smoothing:antialiased;
+    font-feature-settings:"cv05" 1,"ss01" 1;
+    overflow-x:hidden;
+  }
+  /* ambient color so glass has something to refract */
+  body::before{
+    content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+    background:
+      radial-gradient(680px 460px at 8% -6%, rgba(79,70,229,.16), transparent 60%),
+      radial-gradient(620px 460px at 102% 0%, rgba(124,58,237,.13), transparent 60%),
+      radial-gradient(700px 520px at 88% 108%, rgba(14,165,233,.12), transparent 60%),
+      radial-gradient(620px 480px at -4% 112%, rgba(5,150,105,.08), transparent 60%);
+  }
+  ::selection{background:rgba(79,70,229,.16)}
+  a{color:inherit;text-decoration:none}
+  button{font-family:inherit;cursor:pointer}
+  .tnum{font-variant-numeric:tabular-nums}
+
+  /* ───────── NAVBAR ───────── */
+  .nav{
+    position:sticky;top:0;z-index:100;
+    backdrop-filter:saturate(1.6) blur(16px);-webkit-backdrop-filter:saturate(1.6) blur(16px);
+    background:rgba(255,255,255,.74);border-bottom:1px solid var(--line);
+  }
+  .nav-in{max-width:1240px;margin:0 auto;padding:13px 22px;display:flex;align-items:center;gap:20px}
+  .logo{display:flex;align-items:center;gap:9px;font-family:var(--fd);font-weight:800;letter-spacing:-.02em;font-size:18px}
+  .logo .mark{
+    width:28px;height:28px;border-radius:9px;display:grid;place-items:center;color:#fff;font-size:15px;
+    background:linear-gradient(145deg,var(--indigo),var(--violet));box-shadow:0 6px 14px -6px rgba(79,70,229,.7);
+  }
+  .logo b{color:var(--indigo)}
+  .nav-links{display:flex;gap:3px;margin-left:8px;flex:1;overflow-x:auto;scrollbar-width:none}
+  .nav-links::-webkit-scrollbar{display:none}
+  .nav-links a{
+    padding:8px 13px;border-radius:10px;font-size:13.5px;font-weight:500;color:var(--muted);
+    white-space:nowrap;transition:.15s;
+  }
+  .nav-links a:hover{color:var(--ink);background:var(--indigo-soft)}
+  .nav-links a.active{color:var(--indigo);background:var(--indigo-soft);font-weight:600}
+  .btn{
+    border:none;border-radius:11px;font-weight:600;font-size:13.5px;padding:9px 16px;
+    background:linear-gradient(145deg,var(--indigo),var(--indigo-700));color:#fff;white-space:nowrap;
+    box-shadow:0 8px 20px -8px rgba(79,70,229,.6);transition:.16s;
+  }
+  .btn:hover{transform:translateY(-1px);box-shadow:0 12px 26px -8px rgba(79,70,229,.7)}
+  .btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line);box-shadow:var(--shadow-sm)}
+  .btn.ghost:hover{background:#fafbff}
+
+  /* ───────── LAYOUT ───────── */
+  main{max-width:1240px;margin:0 auto;padding:0 22px 90px}
+  .view{display:none;animation:fade .4s ease}
+  .view.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  .eyebrow{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--indigo)}
+  .page-head{padding:34px 0 22px}
+  .page-head h2{font-family:var(--fd);font-weight:700;font-size:30px;letter-spacing:-.025em;margin-top:8px}
+  .page-head p{color:var(--muted);margin-top:7px;max-width:560px;font-size:15px}
+
+  /* glass card */
+  .glass{
+    background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+    border:1px solid var(--glass-brd);border-radius:var(--r);box-shadow:var(--shadow);
+  }
+  .card-pad{padding:20px}
+
+  /* ───────── HERO ───────── */
+  .hero{padding:64px 0 30px;text-align:center;position:relative}
+  .hero .pill{
+    display:inline-flex;align-items:center;gap:8px;padding:6px 13px;border-radius:99px;font-size:12.5px;font-weight:600;
+    color:var(--indigo-700);background:var(--indigo-soft);border:1px solid rgba(79,70,229,.18);
+  }
+  .hero .pill .dot{width:7px;height:7px;border-radius:50%;background:var(--emerald)}
+  .hero h1{
+    font-family:var(--fd);font-weight:800;letter-spacing:-.035em;line-height:1.04;margin:22px auto 0;
+    font-size:clamp(38px,6vw,66px);max-width:880px;
+  }
+  .hero h1 .grad{
+    background:linear-gradient(115deg,var(--indigo),var(--violet) 60%,var(--sky));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .hero .sub{color:var(--muted);font-size:clamp(16px,2vw,19px);max-width:580px;margin:20px auto 0}
+  .hero .cta{display:flex;gap:12px;justify-content:center;margin-top:30px;flex-wrap:wrap}
+  .hero .btn{padding:13px 24px;font-size:15px;border-radius:13px}
+
+  .stat-row{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:56px;
+  }
+  .stat{padding:24px 20px;text-align:left;position:relative;overflow:hidden}
+  .stat .v{font-family:var(--fd);font-weight:800;font-size:40px;letter-spacing:-.03em;line-height:1}
+  .stat .l{color:var(--muted);font-size:13.5px;margin-top:8px;font-weight:500}
+  .stat .ic{position:absolute;right:16px;top:16px;width:34px;height:34px;border-radius:10px;display:grid;place-items:center}
+
+  .logos{margin-top:60px;text-align:center}
+  .logos p{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);font-weight:600}
+  .logos .row{display:flex;gap:34px;justify-content:center;flex-wrap:wrap;margin-top:18px;opacity:.6;font-family:var(--fd);font-weight:700;font-size:18px;color:var(--muted)}
+
+  .feat{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:64px}
+  .feat .f{padding:22px}
+  .feat .f .fi{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;margin-bottom:14px}
+  .feat .f h3{font-family:var(--fd);font-size:17px;font-weight:700;letter-spacing:-.01em}
+  .feat .f p{color:var(--muted);font-size:14px;margin-top:6px}
+
+  /* ───────── KPI GRID ───────── */
+  .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .kpi{padding:20px;position:relative;transition:.18s}
+  .kpi:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+  .kpi .top{display:flex;justify-content:space-between;align-items:flex-start}
+  .kpi .k{font-size:13px;color:var(--muted);font-weight:500}
+  .kpi .ic{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;flex:none}
+  .kpi .v{font-family:var(--fd);font-weight:800;font-size:32px;letter-spacing:-.025em;margin-top:14px;line-height:1}
+  .kpi .meta{font-size:12.5px;margin-top:7px;font-weight:600}
+  .kpi .meta.pos{color:var(--emerald)} .kpi .meta.neg{color:var(--rose)} .kpi .meta.mut{color:var(--muted-2)}
+
+  /* grids of charts */
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+  .panel{padding:20px}
+  .panel h3{font-family:var(--fd);font-size:16px;font-weight:700;letter-spacing:-.01em;display:flex;align-items:center;gap:9px}
+  .panel .ph-sub{color:var(--muted-2);font-size:12.5px;margin-top:2px}
+  .panel-head{margin-bottom:16px}
+
+  /* donut + legend */
+  .donut-wrap{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+  .donut{position:relative;width:172px;height:172px;flex:none}
+  .donut .mid{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .donut .mid .n{font-family:var(--fd);font-weight:800;font-size:26px;letter-spacing:-.02em}
+  .donut .mid .t{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2);font-weight:700;margin-top:2px}
+  .legend{flex:1;min-width:170px;display:flex;flex-direction:column;gap:11px}
+  .legend .li{display:flex;align-items:center;gap:10px}
+  .legend .sw{width:10px;height:10px;border-radius:3px;flex:none}
+  .legend .ln{font-size:13px;flex:1}
+  .legend .lv{font-family:var(--fd);font-weight:700;font-size:13px;color:var(--muted)}
+
+  /* horizontal bars */
+  .bars{display:flex;flex-direction:column;gap:15px}
+  .bar .bh{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px}
+  .bar .bn{font-size:13.5px;font-weight:500}
+  .bar .bv{font-family:var(--fd);font-weight:700;font-size:13px;color:var(--muted)}
+  .bar .bt{height:10px;border-radius:7px;background:rgba(17,20,28,.05);overflow:hidden}
+  .bar .bf{height:100%;width:0;border-radius:7px;transition:width 1.05s cubic-bezier(.22,1,.36,1)}
+  .bar.stack .bt{display:flex}
+  .bar.stack .bf{transition:width 1.05s cubic-bezier(.22,1,.36,1)}
+
+  /* timeline */
+  .timeline{display:flex;flex-direction:column}
+  .tl{display:flex;gap:13px;padding:12px 2px;border-bottom:1px solid var(--line-2)}
+  .tl:last-child{border-bottom:none}
+  .tl .tdot{width:9px;height:9px;border-radius:50%;margin-top:6px;flex:none}
+  .tl .tm{flex:1}
+  .tl .tt{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+  .tl .tp{font-weight:600;font-size:14px}
+  .tl .tg{font-size:11.5px;color:var(--muted-2);font-family:var(--fd);flex:none}
+  .tl .tr{font-size:12.5px;color:var(--muted);margin-top:2px}
+  .tag{font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:99px;font-family:var(--fd)}
+  .tag.no{background:var(--rose-soft);color:var(--rose)} .tag.yes{background:var(--emerald-soft);color:var(--emerald)}
+
+  /* recommendations */
+  .recos{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}
+  .reco{padding:18px;position:relative;overflow:hidden}
+  .reco::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px}
+  .reco.c1::before{background:var(--indigo)} .reco.c2::before{background:var(--violet)} .reco.c3::before{background:var(--sky)}
+  .reco .rk{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--indigo)}
+  .reco.c2 .rk{color:var(--violet)} .reco.c3 .rk{color:var(--sky)}
+  .reco .rb{font-size:14px;margin-top:8px;line-height:1.5}
+  .reco .rb b{font-weight:700}
+
+  /* ───────── FORM ───────── */
+  .form-wrap{display:grid;grid-template-columns:1.3fr .9fr;gap:18px;align-items:start}
+  .field{margin-bottom:16px}
+  .field label{display:block;font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:7px}
+  .field .req{color:var(--rose)}
+  .input,select,textarea{
+    width:100%;border:1px solid var(--line);border-radius:11px;padding:11px 13px;font-family:inherit;font-size:14px;color:var(--ink);
+    background:#fff;transition:.15s;
+  }
+  select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238A93A4' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;padding-right:34px}
+  .input:focus,select:focus,textarea:focus{outline:none;border-color:var(--indigo);box-shadow:0 0 0 3px rgba(79,70,229,.14)}
+  textarea{resize:vertical;min-height:84px}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .seg{display:flex;gap:8px}
+  .seg .so{
+    flex:1;text-align:center;border:1.4px solid var(--line);border-radius:11px;padding:12px;font-weight:600;font-size:13.5px;
+    background:#fff;transition:.15s;color:var(--muted);
+  }
+  .seg .so[data-v="Yes"].on{border-color:var(--emerald);background:var(--emerald-soft);color:var(--emerald)}
+  .seg .so[data-v="No"].on{border-color:var(--rose);background:var(--rose-soft);color:var(--rose)}
+  .reason-block{max-height:0;overflow:hidden;opacity:0;transition:max-height .4s ease,opacity .3s}
+  .reason-block.show{max-height:360px;opacity:1}
+  .form-aside .glass{padding:22px}
+  .form-aside h4{font-family:var(--fd);font-size:15px;font-weight:700;margin-bottom:6px}
+  .form-aside p{color:var(--muted);font-size:13.5px}
+  .form-aside ul{list-style:none;margin-top:14px;display:flex;flex-direction:column;gap:11px}
+  .form-aside li{display:flex;gap:10px;font-size:13.5px;color:var(--muted)}
+  .form-aside li svg{flex:none;color:var(--indigo);margin-top:2px}
+
+  /* success overlay */
+  .success{
+    position:fixed;inset:0;z-index:200;display:none;place-items:center;
+    background:rgba(20,18,40,.32);backdrop-filter:blur(6px);
+  }
+  .success.show{display:grid;animation:fade .3s}
+  .success .box{background:#fff;border-radius:22px;padding:38px 40px;text-align:center;box-shadow:var(--shadow-lg);max-width:360px}
+  .success .ring{width:78px;height:78px;margin:0 auto 18px}
+  .success h3{font-family:var(--fd);font-size:21px;font-weight:700}
+  .success p{color:var(--muted);font-size:14px;margin-top:7px}
+  .ckc{stroke:var(--emerald);stroke-width:3.5;fill:none;stroke-dasharray:166;stroke-dashoffset:166;animation:dc .5s .15s forwards ease}
+  .ckk{stroke:var(--emerald);stroke-width:4;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:48;stroke-dashoffset:48;animation:dc .35s .55s forwards ease}
+  @keyframes dc{to{stroke-dashoffset:0}}
+
+  /* ───────── DATABASE ───────── */
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+  .search{flex:1;min-width:200px;position:relative}
+  .search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted-2)}
+  .search input{padding-left:38px}
+  .toolbar select{width:auto;min-width:130px}
+  .tbl-wrap{overflow-x:auto;border-radius:var(--r)}
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  thead th{
+    text-align:left;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted-2);font-weight:700;
+    padding:13px 16px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--glass-2)
+  }
+  tbody td{padding:13px 16px;border-bottom:1px solid var(--line-2);white-space:nowrap}
+  tbody tr:hover{background:var(--indigo-soft)}
+  tbody tr:last-child td{border-bottom:none}
+  .cid{font-family:var(--fd);font-weight:700;color:var(--indigo)}
+  .muted{color:var(--muted)}
+  .db-foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:13px;color:var(--muted)}
+
+  /* funnel */
+  .funnel{display:flex;flex-direction:column;gap:10px}
+  .fn{position:relative;border-radius:12px;padding:14px 18px;color:#fff;display:flex;justify-content:space-between;align-items:center;font-weight:600}
+  .fn .fl{font-size:14px} .fn .fv{font-family:var(--fd);font-weight:800;font-size:18px}
+  .fn .fp{font-size:12px;opacity:.85;font-weight:500;margin-left:8px}
+
+  /* walkaway ranked cards */
+  .wa-list{display:flex;flex-direction:column;gap:14px}
+  .wa{display:grid;grid-template-columns:64px 1fr auto;gap:20px;align-items:center;padding:20px 22px}
+  .wa .rank{font-family:var(--fd);font-weight:800;font-size:40px;letter-spacing:-.03em;color:var(--indigo);opacity:.9;line-height:1}
+  .wa .wm h3{font-family:var(--fd);font-size:17px;font-weight:700}
+  .wa .wm .wact{color:var(--muted);font-size:13.5px;margin-top:6px;display:flex;gap:8px;align-items:flex-start}
+  .wa .wm .wact svg{flex:none;color:var(--amber);margin-top:2px}
+  .wa .wstat{text-align:right;min-width:120px}
+  .wa .wstat .wf{font-family:var(--fd);font-weight:800;font-size:22px}
+  .wa .wstat .wfl{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted-2);font-weight:700}
+  .wa .wstat .wbar{height:7px;border-radius:6px;background:rgba(17,20,28,.06);margin-top:9px;overflow:hidden}
+  .wa .wstat .wbf{height:100%;width:0;border-radius:6px;background:linear-gradient(90deg,var(--indigo),var(--violet));transition:width 1s cubic-bezier(.22,1,.36,1)}
+
+  /* AI cards */
+  .ai-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  .ai{padding:22px;position:relative;overflow:hidden}
+  .ai .glow{position:absolute;right:-30px;top:-30px;width:120px;height:120px;border-radius:50%;filter:blur(30px);opacity:.5}
+  .ai .ak{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--indigo)}
+  .ai .av{font-family:var(--fd);font-weight:700;font-size:20px;letter-spacing:-.02em;margin-top:12px;line-height:1.25}
+  .ai .av b{color:var(--indigo)}
+  .ai .ad{color:var(--muted);font-size:13.5px;margin-top:9px}
+
+  /* about */
+  .about-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;align-items:start}
+  .story p{color:var(--muted);font-size:15px;margin-top:12px}
+  .story h3{font-family:var(--fd);font-size:17px;font-weight:700;margin-top:22px}
+  .flow{display:flex;flex-direction:column;gap:0}
+  .flow .fs{display:flex;gap:13px;align-items:center;padding:11px 0}
+  .flow .fn-num{width:30px;height:30px;border-radius:9px;background:var(--indigo-soft);color:var(--indigo);display:grid;place-items:center;font-family:var(--fd);font-weight:700;font-size:13px;flex:none}
+  .flow .fs .ft{font-size:14px;font-weight:500}
+  .flow .conn{width:30px;display:flex;justify-content:center}
+  .flow .conn span{width:2px;height:14px;background:var(--line)}
+  .team{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+  .tm{display:flex;gap:11px;align-items:center;padding:13px;border:1px solid var(--line);border-radius:13px}
+  .tm .av2{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;color:#fff;font-family:var(--fd);font-weight:700;font-size:14px}
+  .tm .nm{font-size:13.5px;font-weight:600} .tm .rl{font-size:11.5px;color:var(--muted)}
+
+  .foot{max-width:1240px;margin:0 auto;padding:26px 22px;border-top:1px solid var(--line);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;color:var(--muted-2);font-size:13px}
+
+  /* toast */
+  .toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,20px);z-index:210;background:var(--ink);color:#fff;
+    padding:12px 20px;border-radius:13px;font-size:13.5px;font-weight:600;display:flex;gap:9px;align-items:center;opacity:0;pointer-events:none;transition:.3s;box-shadow:var(--shadow-lg)}
+  .toast svg{color:var(--emerald)}
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+
+  @media (max-width:880px){
+    .stat-row,.kpis,.feat,.recos,.ai-grid{grid-template-columns:1fr 1fr}
+    .grid-2,.form-wrap,.about-grid{grid-template-columns:1fr}
+    .wa{grid-template-columns:48px 1fr;gap:14px}
+    .wa .wstat{grid-column:1/-1;text-align:left}
+  }
+  @media (max-width:560px){
+    .stat-row,.kpis,.feat,.recos,.ai-grid,.team{grid-template-columns:1fr}
+    .nav-links{display:none}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+
+
+<!-- NAV -->
+<header class="nav">
+  <div class="nav-in">
+    <a class="logo" href="#" data-go="home"><span class="mark">W</span>WHY <b>NOT?</b></a>
+    <nav class="nav-links" id="navLinks">
+      <a data-nav="dashboard" data-go="dashboard">Dashboard</a>
+      <a data-nav="record" data-go="record">Record</a>
+      <a data-nav="database" data-go="database">Database</a>
+      <a data-nav="analytics" data-go="analytics">Analytics</a>
+      <a data-nav="walkaways" data-go="walkaways">Walkaways</a>
+      <a data-nav="ai" data-go="ai">AI Insights</a>
+      <a data-nav="about" data-go="about">About</a>
+    </nav>
+    <button class="btn" data-go="record">Record interaction</button>
+  </div>
+</header>
+
+<main>
+
+  <!-- ════ HOME / HERO ════ -->
+  <section class="view active" id="view-home">
+    <div class="hero">
+      <span class="pill"><span class="dot"></span>Customer Objection Intelligence</span>
+      <h1>Businesses analyze sales. <span class="grad">WHY NOT? analyzes lost sales.</span></h1>
+      <p class="sub">Transform customer rejections into actionable business intelligence — and start turning every <em>"no"</em> into <em>know</em>.</p>
+      <div class="cta">
+        <button class="btn" data-go="dashboard">Explore insights</button>
+        <button class="btn ghost" data-go="record">Record an interaction</button>
+      </div>
+    </div>
+
+    <div class="stat-row">
+      <div class="glass stat"><div class="ic" style="background:var(--indigo-soft);color:var(--indigo)">${ICN_people}</div><div class="v tnum" id="h-interactions">0</div><div class="l">Customer interactions</div></div>
+      <div class="glass stat"><div class="ic" style="background:var(--emerald-soft);color:var(--emerald)">${ICN_cart}</div><div class="v tnum" id="h-purchases" style="color:var(--emerald)">0</div><div class="l">Purchases</div></div>
+      <div class="glass stat"><div class="ic" style="background:var(--rose-soft);color:var(--rose)">${ICN_walk}</div><div class="v tnum" id="h-walkaways" style="color:var(--rose)">0</div><div class="l">Walkaways</div></div>
+      <div class="glass stat"><div class="ic" style="background:var(--indigo-soft);color:var(--indigo)">${ICN_pct}</div><div class="v tnum" id="h-conv">0%</div><div class="l">Conversion rate</div></div>
+    </div>
+
+    <div class="logos">
+      <p>Design language inspired by</p>
+      <div class="row"><span>Stripe</span><span>Notion</span><span>Linear</span><span>HubSpot</span><span>Airtable</span></div>
+    </div>
+
+    <div class="feat">
+      <div class="glass f"><div class="fi" style="background:var(--indigo-soft);color:var(--indigo)">${ICN_capture}</div><h3>Capture the "no"</h3><p>Reps log every walkaway in seconds — reason, product, and customer in one clean form.</p></div>
+      <div class="glass f"><div class="fi" style="background:var(--violet-soft,rgba(124,58,237,.1));color:var(--violet)">${ICN_chart}</div><h3>See the patterns</h3><p>Dashboards surface why customers leave, which products stall, and who actually buys.</p></div>
+      <div class="glass f"><div class="fi" style="background:var(--sky-soft,rgba(14,165,233,.1));color:var(--sky)">${ICN_spark}</div><h3>Act on it</h3><p>The insights engine turns objections into specific, revenue-recovering recommendations.</p></div>
+    </div>
+  </section>
+
+  <!-- ════ DASHBOARD ════ -->
+  <section class="view" id="view-dashboard">
+    <div class="page-head">
+      <span class="eyebrow">Executive dashboard</span>
+      <h2>The whole pipeline, at a glance</h2>
+      <p>Every metric below is computed live from your recorded interactions.</p>
+    </div>
+    <div class="kpis" id="dash-kpis"></div>
+    <div class="grid-2">
+      <div class="glass panel">
+        <div class="panel-head"><h3>${ICN_pie} Customer objections</h3><div class="ph-sub">Why customers walked away</div></div>
+        <div class="donut-wrap"><div class="donut" id="d-donut"></div><div class="legend" id="d-legend"></div></div>
+      </div>
+      <div class="glass panel">
+        <div class="panel-head"><h3>${ICN_bar} Revenue by product</h3><div class="ph-sub">Captured revenue from closed sales</div></div>
+        <div class="bars" id="d-revenue"></div>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="glass panel">
+        <div class="panel-head"><h3>${ICN_clock} Customer activity</h3><div class="ph-sub">Most recent interactions</div></div>
+        <div class="timeline" id="d-timeline"></div>
+      </div>
+      <div class="glass panel">
+        <div class="panel-head"><h3>${ICN_spark} Top recommendations</h3><div class="ph-sub">Generated from current patterns</div></div>
+        <div class="recos" id="d-recos" style="grid-template-columns:1fr;margin-top:0"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ RECORD ════ -->
+  <section class="view" id="view-record">
+    <div class="page-head">
+      <span class="eyebrow">Capture</span>
+      <h2>Record a customer interaction</h2>
+      <p>Log what happened — especially when the answer was no. It takes about fifteen seconds.</p>
+    </div>
+    <div class="form-wrap">
+      <div class="glass card-pad">
+        <div class="two">
+          <div class="field"><label>Customer ID</label><input class="input" id="f-id" placeholder="Auto-generated" disabled></div>
+          <div class="field"><label>Salesperson <span class="req">*</span></label>
+            <select id="f-rep"><option value="">Select…</option><option>Aarav K</option><option>Diya S</option><option>Rohan M</option><option>Meera P</option></select></div>
+        </div>
+        <div class="two">
+          <div class="field"><label>Age group <span class="req">*</span></label>
+            <select id="f-age"><option value="">Select…</option><option>18–25</option><option>26–35</option><option>36–50</option><option>50+</option></select></div>
+          <div class="field"><label>Gender</label>
+            <select id="f-gender"><option value="">Select…</option><option>Female</option><option>Male</option><option>Other</option></select></div>
+        </div>
+        <div class="field"><label>Product viewed <span class="req">*</span></label>
+          <select id="f-product"><option value="">Select…</option><option>Tangram</option><option>Orbit</option><option>Nimbus</option><option>Cedar</option><option>Pulse</option></select></div>
+        <div class="field"><label>Purchase decision <span class="req">*</span></label>
+          <div class="seg" id="f-decision"><button type="button" class="so" data-v="Yes">✓ Purchased</button><button type="button" class="so" data-v="No">✕ Walked away</button></div>
+        </div>
+        <div class="reason-block" id="f-reasonblock">
+          <div class="field"><label>Reason for rejection <span class="req">*</span></label>
+            <select id="f-reason"><option value="">Select…</option><option>Too Expensive</option><option>Not Needed</option><option>Already Own Similar Product</option><option>Need More Information</option><option>Lack of Trust</option></select></div>
+          <div class="field"><label>Customer notes</label><textarea id="f-notes" placeholder="e.g. Liked the product but wanted to compare prices first…"></textarea></div>
+        </div>
+        <button class="btn" style="width:100%;padding:13px;margin-top:6px" id="f-submit">Record insight</button>
+      </div>
+      <div class="form-aside">
+        <div class="glass">
+          <h4>Why we capture rejections</h4>
+          <p>Closed sales tell you what's working. Walkaways tell you what to fix — and that's where the revenue you're missing actually lives.</p>
+          <ul>
+            <li>${ICN_check}<span>Each entry feeds the dashboard and insights engine instantly.</span></li>
+            <li>${ICN_check}<span>Reasons are standardized so patterns are easy to spot.</span></li>
+            <li>${ICN_check}<span>Notes give context the charts can't.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ DATABASE ════ -->
+  <section class="view" id="view-database">
+    <div class="page-head">
+      <span class="eyebrow">Customer database</span>
+      <h2>Every interaction, searchable</h2>
+      <p>The single source of truth behind every chart in WHY NOT?.</p>
+    </div>
+    <div class="toolbar">
+      <div class="search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><input class="input" id="db-search" placeholder="Search ID, product, reason, salesperson…"></div>
+      <select id="db-product"><option value="">All products</option><option>Tangram</option><option>Orbit</option><option>Nimbus</option><option>Cedar</option><option>Pulse</option></select>
+      <select id="db-age"><option value="">All ages</option><option>18–25</option><option>26–35</option><option>36–50</option><option>50+</option></select>
+      <select id="db-status"><option value="">All decisions</option><option value="Yes">Purchased</option><option value="No">Walked away</option></select>
+      <select id="db-reason"><option value="">All objections</option><option>Too Expensive</option><option>Not Needed</option><option>Already Own Similar Product</option><option>Need More Information</option><option>Lack of Trust</option></select>
+      <button class="btn ghost" id="db-export">${ICN_down} Export CSV</button>
+    </div>
+    <div class="glass tbl-wrap">
+      <table>
+        <thead><tr><th>Customer ID</th><th>Date</th><th>Product</th><th>Decision</th><th>Reason</th><th>Age</th><th>Salesperson</th></tr></thead>
+        <tbody id="db-body"></tbody>
+      </table>
+    </div>
+    <div class="db-foot"><span id="db-count"></span><span>Showing live data · click Export for CSV</span></div>
+  </section>
+
+  <!-- ════ ANALYTICS ════ -->
+  <section class="view" id="view-analytics">
+    <div class="page-head">
+      <span class="eyebrow">Customer behavior analytics</span>
+      <h2>Understand the patterns</h2>
+      <p>Where customers drop off, who converts, and how much is left on the table.</p>
+    </div>
+    <div class="grid-2">
+      <div class="glass panel"><div class="panel-head"><h3>${ICN_pie} Objection breakdown</h3></div><div class="donut-wrap"><div class="donut" id="an-donut"></div><div class="legend" id="an-legend"></div></div></div>
+      <div class="glass panel"><div class="panel-head"><h3>${ICN_bar} Product conversion rate</h3></div><div class="bars" id="an-conv"></div></div>
+    </div>
+    <div class="grid-2">
+      <div class="glass panel"><div class="panel-head"><h3>${ICN_bar} Customer demographics</h3><div class="ph-sub">Purchased vs walked away, by age</div></div><div class="bars" id="an-demo"></div>
+        <div style="display:flex;gap:18px;margin-top:14px;font-size:12px;color:var(--muted)"><span><i style="display:inline-block;width:9px;height:9px;border-radius:3px;background:var(--emerald);margin-right:6px"></i>Purchased</span><span><i style="display:inline-block;width:9px;height:9px;border-radius:3px;background:var(--rose);margin-right:6px"></i>Walked away</span></div>
+      </div>
+      <div class="glass panel"><div class="panel-head"><h3>${ICN_pct} Age group purchase analysis</h3></div><div class="bars" id="an-age"></div></div>
+    </div>
+    <div class="grid-2">
+      <div class="glass panel"><div class="panel-head"><h3>${ICN_money} Lost revenue analysis</h3><div class="ph-sub">Walkaway value by product</div></div><div class="bars" id="an-lost"></div></div>
+      <div class="glass panel"><div class="panel-head"><h3>${ICN_funnel} Conversion funnel</h3></div><div class="funnel" id="an-funnel"></div></div>
+    </div>
+    <div class="glass panel" style="margin-top:16px"><div class="panel-head"><h3>${ICN_spark} Insights panel</h3></div><div class="recos" id="an-insights" style="margin-top:0"></div></div>
+  </section>
+
+  <!-- ════ WALKAWAYS ════ -->
+  <section class="view" id="view-walkaways">
+    <div class="page-head">
+      <span class="eyebrow">The core question</span>
+      <h2>Why customers walk away</h2>
+      <p>The reasons behind every lost sale, ranked — each paired with a move to win the next one.</p>
+    </div>
+    <div class="wa-list" id="wa-list"></div>
+  </section>
+
+  <!-- ════ AI INSIGHTS ════ -->
+  <section class="view" id="view-ai">
+    <div class="page-head">
+      <span class="eyebrow">Insights engine</span>
+      <h2>What the data is telling you</h2>
+      <p>Automatically generated business intelligence from your objection data.</p>
+    </div>
+    <div class="ai-grid" id="ai-cards"></div>
+  </section>
+
+  <!-- ════ ABOUT ════ -->
+  <section class="view" id="view-about">
+    <div class="page-head">
+      <span class="eyebrow">About the project</span>
+      <h2>Turning "No" into Know</h2>
+    </div>
+    <div class="about-grid">
+      <div class="glass card-pad story">
+        <p>We discovered this problem during the <b>Mandi field immersion exercise</b>. Watching real vendors and customers, one gap stood out: businesses obsess over the sales they win, but almost never study the ones they lose.</p>
+        <h3>The problem</h3>
+        <p>Businesses track successful sales but rarely analyze customer rejections — so the single richest source of improvement walks out the door unrecorded.</p>
+        <h3>The solution</h3>
+        <p>WHY NOT? captures customer objections at the moment they happen and transforms them into actionable business intelligence: clear patterns, ranked reasons, and concrete recommendations a small team can act on the same day.</p>
+        <h3>The team</h3>
+        <div class="team">
+          <div class="tm"><div class="av2" style="background:linear-gradient(145deg,var(--indigo),var(--violet))">A</div><div><div class="nm">Your Name</div><div class="rl">Product &amp; Research</div></div></div>
+          <div class="tm"><div class="av2" style="background:linear-gradient(145deg,var(--violet),var(--sky))">B</div><div><div class="nm">Team Member</div><div class="rl">Data &amp; Analytics</div></div></div>
+          <div class="tm"><div class="av2" style="background:linear-gradient(145deg,var(--sky),var(--emerald))">C</div><div><div class="nm">Team Member</div><div class="rl">Design &amp; Frontend</div></div></div>
+          <div class="tm"><div class="av2" style="background:linear-gradient(145deg,var(--emerald),var(--indigo))">D</div><div><div class="nm">Team Member</div><div class="rl">Field &amp; Interviews</div></div></div>
+        </div>
+      </div>
+      <div class="glass card-pad">
+        <h4 style="font-family:var(--fd);font-size:15px;font-weight:700;margin-bottom:6px">How it works</h4>
+        <p style="color:var(--muted);font-size:13.5px;margin-bottom:8px">From a single conversation to a better decision.</p>
+        <div class="flow" id="about-flow"></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot"><span>WHY NOT? — Turning "No" into Know</span><span>Built for the Mandi field immersion · ${YEAR}</span></footer>
+
+<!-- success + toast -->
+<div class="success" id="success"><div class="box">
+  <svg class="ring" viewBox="0 0 60 60"><circle class="ckc" cx="30" cy="30" r="26"/><path class="ckk" d="M19 31l8 8 15-17"/></svg>
+  <h3>Customer insight recorded</h3><p>It's now part of your live dashboard and analytics.</p>
+</div></div>
+<div class="toast" id="toast"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span id="toast-msg"></span></div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ───── icons (inline SVG strings) ───── */
+  var I = {
+    people:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9"/><path d="M16 3.1a4 4 0 0 1 0 7.8"/></svg>',
+    cart:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.5 3h2l2.6 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21.5 7H6"/></svg>',
+    walk:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 4a2 2 0 1 0 0-.01"/><path d="m9 20 2-5 2 2 1 3"/><path d="m6 9 3-1 2 3 3 1"/><path d="m16 22-2-6"/></svg>',
+    pct:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 5 5 19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>',
+    money:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 9h4.5a1.5 1.5 0 0 1 0 3H9m0 0h4.5a1.5 1.5 0 0 1 0 3H9m1.5-9V6m0 12v-1.5"/></svg>',
+    flag:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><path d="M4 22v-7"/></svg>',
+    pie:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--indigo)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12A9 9 0 1 1 12 3v9z"/><path d="M21 12A9 9 0 0 0 12 3v9z" opacity=".4"/></svg>',
+    bar:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--indigo)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="6"/><rect x="12" y="7" width="3" height="10"/><rect x="17" y="13" width="3" height="4"/></svg>',
+    clock:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--indigo)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+    spark:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg>',
+    funnel:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--indigo)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h18l-7 8v6l-4 2v-8z"/></svg>',
+    check:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>',
+    down:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>',
+    capture:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>',
+    chart:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 14 3-4 3 3 4-6"/></svg>'
+  };
+  /* inject icons into the static HTML placeholders */
+  document.body.innerHTML = document.body.innerHTML
+    .replace(/\$\{ICN_people\}/g,I.people).replace(/\$\{ICN_cart\}/g,I.cart).replace(/\$\{ICN_walk\}/g,I.walk)
+    .replace(/\$\{ICN_pct\}/g,I.pct).replace(/\$\{ICN_money\}/g,I.money).replace(/\$\{ICN_pie\}/g,I.pie)
+    .replace(/\$\{ICN_bar\}/g,I.bar).replace(/\$\{ICN_clock\}/g,I.clock).replace(/\$\{ICN_spark\}/g,I.spark)
+    .replace(/\$\{ICN_funnel\}/g,I.funnel).replace(/\$\{ICN_check\}/g,I.check).replace(/\$\{ICN_down\}/g,I.down)
+    .replace(/\$\{ICN_capture\}/g,I.capture).replace(/\$\{ICN_chart\}/g,I.chart)
+    .replace(/\$\{YEAR\}/g,new Date().getFullYear());
+
+  /* ───── domain ───── */
+  var PRODUCTS = [
+    {name:'Tangram',price:1499,color:'#4F46E5'},
+    {name:'Orbit',  price:2999,color:'#7C3AED'},
+    {name:'Nimbus', price:899, color:'#2563EB'},
+    {name:'Cedar',  price:1999,color:'#0EA5E9'},
+    {name:'Pulse',  price:1299,color:'#0891B2'}
+  ];
+  var PRICE = {}; PRODUCTS.forEach(function(p){PRICE[p.name]=p.price;});
+  var PCOLOR= {}; PRODUCTS.forEach(function(p){PCOLOR[p.name]=p.color;});
+  var REASONS = [
+    {r:'Too Expensive',color:'#4F46E5',action:'Introduce bundled offers or a limited-time discount tier.'},
+    {r:'Not Needed',color:'#7C3AED',action:'Tighten targeting so reps spend time with high-intent customers.'},
+    {r:'Already Own Similar Product',color:'#2563EB',action:'Lead with trade-in incentives and a clear point of difference.'},
+    {r:'Need More Information',color:'#0EA5E9',action:'Equip reps with a one-page explainer and a 60-second demo.'},
+    {r:'Lack of Trust',color:'#F59E0B',action:'Surface reviews, guarantees and certifications at the point of sale.'}
+  ];
+  var RCOLOR={},RACT={}; REASONS.forEach(function(x){RCOLOR[x.r]=x.color;RACT[x.r]=x.action;});
+  var REPS=['Aarav K','Diya S','Rohan M','Meera P'];
+
+  var seed = [
+    ['Tangram','Yes',null,'18–25','Female'],['Tangram','Yes',null,'26–35','Male'],
+    ['Tangram','Yes',null,'18–25','Female'],['Tangram','Yes',null,'36–50','Male'],
+    ['Nimbus','Yes',null,'18–25','Female'],['Nimbus','Yes',null,'26–35','Male'],
+    ['Pulse','Yes',null,'18–25','Male'],['Pulse','Yes',null,'26–35','Female'],
+    ['Cedar','Yes',null,'36–50','Male'],['Cedar','Yes',null,'26–35','Female'],
+    ['Orbit','Yes',null,'26–35','Male'],['Nimbus','Yes',null,'18–25','Female'],
+    ['Orbit','No','Too Expensive','36–50','Male'],['Orbit','No','Too Expensive','50+','Male'],
+    ['Cedar','No','Too Expensive','36–50','Female'],['Pulse','No','Too Expensive','36–50','Male'],
+    ['Nimbus','No','Too Expensive','26–35','Female'],['Orbit','No','Too Expensive','26–35','Male'],
+    ['Nimbus','No','Not Needed','50+','Male'],['Cedar','No','Not Needed','50+','Female'],
+    ['Pulse','No','Not Needed','50+','Male'],['Tangram','No','Not Needed','50+','Female'],
+    ['Cedar','No','Already Own Similar Product','50+','Male'],['Orbit','No','Already Own Similar Product','36–50','Female'],
+    ['Nimbus','No','Already Own Similar Product','36–50','Male'],['Pulse','No','Need More Information','26–35','Female'],
+    ['Tangram','No','Need More Information','36–50','Male'],['Orbit','No','Need More Information','18–25','Male'],
+    ['Cedar','No','Lack of Trust','26–35','Male'],['Pulse','No','Lack of Trust','36–50','Female']
+  ];
+  var data = seed.map(function(s,i){
+    var d=new Date(); d.setDate(d.getDate()-(seed.length-i));
+    return {id:'WN-'+String(i+1).padStart(3,'0'),product:s[0],decision:s[1],reason:s[2],age:s[3],gender:s[4],
+            notes:'',rep:REPS[i%REPS.length],date:d};
+  });
+
+  /* ───── helpers ───── */
+  var $=function(s,el){return (el||document).querySelector(s);};
+  var pct=function(n,d){return d?Math.round(n/d*100):0;};
+  var inr=function(n){return '₹'+Number(n).toLocaleString('en-IN');};
+  var fmtDate=function(d){return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short'});};
+  function countBy(arr,key){var o={};arr.forEach(function(x){var k=typeof key==='function'?key(x):x[key];if(k==null)return;o[k]=(o[k]||0)+1;});return o;}
+
+  function metrics(){
+    var total=data.length, yes=data.filter(function(d){return d.decision==='Yes';}), no=data.filter(function(d){return d.decision==='No';});
+    var captured=yes.reduce(function(s,d){return s+PRICE[d.product];},0);
+    var lost=no.reduce(function(s,d){return s+PRICE[d.product];},0);
+    var oc=countBy(no,'reason');
+    var topObj=Object.keys(oc).sort(function(a,b){return oc[b]-oc[a];})[0]||'—';
+    return {total:total,yes:yes,no:no,nYes:yes.length,nNo:no.length,conv:pct(yes.length,total),
+            captured:captured,lost:lost,oc:oc,topObj:topObj};
+  }
+  function byProduct(){
+    return PRODUCTS.map(function(p){
+      var rows=data.filter(function(d){return d.product===p.name;});
+      var y=rows.filter(function(d){return d.decision==='Yes';}).length;
+      var lost=rows.filter(function(d){return d.decision==='No';}).reduce(function(s,d){return s+p.price;},0);
+      return {name:p.name,color:p.color,price:p.price,total:rows.length,yes:y,rate:pct(y,rows.length),
+              captured:y*p.price,lost:lost};
+    });
+  }
+  var AGES=['18–25','26–35','36–50','50+'];
+  function byAge(){
+    return AGES.map(function(a){
+      var rows=data.filter(function(d){return d.age===a;});
+      var y=rows.filter(function(d){return d.decision==='Yes';}).length;
+      return {age:a,total:rows.length,yes:y,no:rows.length-y,rate:pct(y,rows.length)};
+    });
+  }
+
+  function animateNum(el,target,suffix){
+    if(!el)return; suffix=suffix||'';
+    var t0=performance.now(),dur=900;
+    function step(now){var p=Math.min((now-t0)/dur,1),e=1-Math.pow(1-p,3);el.textContent=Math.round(target*e)+suffix;if(p<1)requestAnimationFrame(step);}
+    requestAnimationFrame(step);
+  }
+  function donutSVG(segs,size,thick){
+    size=size||172;thick=thick||26;
+    var r=(size-thick)/2,c=2*Math.PI*r,cx=size/2,off=0,total=segs.reduce(function(s,x){return s+x.value;},0)||1;
+    var s='<svg width="'+size+'" height="'+size+'" viewBox="0 0 '+size+' '+size+'"><g transform="rotate(-90 '+cx+' '+cx+')">';
+    s+='<circle cx="'+cx+'" cy="'+cx+'" r="'+r+'" fill="none" stroke="rgba(17,20,28,.05)" stroke-width="'+thick+'"/>';
+    segs.forEach(function(seg){
+      var len=seg.value/total*c;
+      s+='<circle cx="'+cx+'" cy="'+cx+'" r="'+r+'" fill="none" stroke="'+seg.color+'" stroke-width="'+thick+'" stroke-dasharray="'+len+' '+(c-len)+'" stroke-dashoffset="'+(-off)+'"/>';
+      off+=len;
+    });
+    return s+'</g></svg>';
+  }
+  function barRows(rows){ /* rows: {name,val,disp,pct,color} */
+    return '<div class="bars">'+rows.map(function(b){
+      return '<div class="bar"><div class="bh"><span class="bn">'+b.name+'</span><span class="bv">'+b.disp+'</span></div>'+
+             '<div class="bt"><div class="bf" style="background:'+(b.color||'var(--indigo)')+'" data-w="'+b.pct+'"></div></div></div>';
+    }).join('')+'</div>';
+  }
+  function animateBars(host){
+    setTimeout(function(){
+      Array.prototype.forEach.call(host.querySelectorAll('.bf'),function(f,i){
+        setTimeout(function(){f.style.width=f.getAttribute('data-w')+'%';},i*70);
+      });
+    },40);
+  }
+
+  /* ───── renderers ───── */
+  function renderHero(){
+    var m=metrics();
+    animateNum($('#h-interactions'),m.total);
+    animateNum($('#h-purchases'),m.nYes);
+    animateNum($('#h-walkaways'),m.nNo);
+    animateNum($('#h-conv'),m.conv,'%');
+  }
+
+  function renderDashboard(){
+    var m=metrics();
+    var kpis=[
+      {k:'Customer interactions',v:m.total,ic:I.people,bg:'var(--indigo-soft)',col:'var(--indigo)',meta:'all recorded',mc:'mut'},
+      {k:'Purchases',v:m.nYes,ic:I.cart,bg:'var(--emerald-soft)',col:'var(--emerald)',meta:'closed sales',mc:'pos'},
+      {k:'Walkaways',v:m.nNo,ic:I.walk,bg:'var(--rose-soft)',col:'var(--rose)',meta:'opportunities to recover',mc:'neg'},
+      {k:'Conversion rate',v:m.conv+'%',ic:I.pct,bg:'var(--indigo-soft)',col:'var(--indigo)',meta:'of all interactions',mc:'mut'},
+      {k:'Revenue captured',v:inr(m.captured),ic:I.money,bg:'var(--emerald-soft)',col:'var(--emerald)',meta:inr(m.lost)+' lost',mc:'neg'},
+      {k:'Top objection',v:m.topObj,ic:I.flag,bg:'var(--amber-soft)',col:'var(--amber)',meta:pct(m.oc[m.topObj],m.nNo)+'% of walkaways',mc:'mut',small:true}
+    ];
+    $('#dash-kpis').innerHTML=kpis.map(function(x){
+      return '<div class="glass kpi"><div class="top"><span class="k">'+x.k+'</span><span class="ic" style="background:'+x.bg+';color:'+x.col+'">'+x.ic+'</span></div>'+
+        '<div class="v" style="'+(x.small?'font-size:20px;':'')+(x.col&&x.k!=="Top objection"?'':'')+'">'+x.v+'</div>'+
+        '<div class="meta '+x.mc+'">'+x.meta+'</div></div>';
+    }).join('');
+
+    // objection donut
+    var segs=REASONS.map(function(x){return {label:x.r,value:m.oc[x.r]||0,color:x.color};}).filter(function(s){return s.value>0;});
+    $('#d-donut').innerHTML=donutSVG(segs)+'<div class="mid"><span class="n tnum">'+m.nNo+'</span><span class="t">Walkaways</span></div>';
+    $('#d-legend').innerHTML=segs.map(function(s){
+      return '<div class="li"><span class="sw" style="background:'+s.color+'"></span><span class="ln">'+s.label+'</span><span class="lv">'+pct(s.value,m.nNo)+'%</span></div>';
+    }).join('');
+
+    // revenue by product
+    var bp=byProduct(), maxRev=Math.max.apply(null,bp.map(function(b){return b.captured;}))||1;
+    var rev=$('#d-revenue'); rev.innerHTML=barRows(bp.slice().sort(function(a,b){return b.captured-a.captured;}).map(function(b){
+      return {name:b.name,disp:inr(b.captured),pct:Math.round(b.captured/maxRev*100),color:b.color};
+    })).replace(/^<div class="bars">|<\/div>$/g,''); animateBars(rev);
+
+    // timeline
+    $('#d-timeline').innerHTML=data.slice().sort(function(a,b){return b.date-a.date;}).slice(0,6).map(function(d){
+      var no=d.decision==='No';
+      return '<div class="tl"><span class="tdot" style="background:'+(no?'var(--rose)':'var(--emerald)')+'"></span>'+
+        '<div class="tm"><div class="tt"><span class="tp">'+d.product+'</span><span class="tg">'+fmtDate(d.date)+'</span></div>'+
+        '<div class="tr">'+(no?d.reason:'Closed the sale')+' · '+d.age+' · '+d.rep+'</div></div>'+
+        '<span class="tag '+(no?'no':'yes')+'">'+(no?'NO':'YES')+'</span></div>';
+    }).join('');
+
+    // recommendations
+    var bestP=bp.slice().sort(function(a,b){return b.rate-a.rate;})[0];
+    var ba=byAge().slice().sort(function(a,b){return b.rate-a.rate;})[0];
+    var recos=[
+      {c:'c1',k:'Pricing',b:'<b>'+pct(m.oc['Too Expensive']||0,m.nNo)+'% of walkaways</b> cite price. '+RACT['Too Expensive']},
+      {c:'c2',k:'What works',b:'<b>'+bestP.name+'</b> converts best at <b>'+bestP.rate+'%</b> — open demos with it.'},
+      {c:'c3',k:'Audience',b:'Buyers aged <b>'+ba.age+'</b> show the strongest intent ('+ba.rate+'%). Prioritise them.'}
+    ];
+    $('#d-recos').innerHTML=recos.map(function(r){return '<div class="glass reco '+r.c+'"><div class="rk">'+r.k+'</div><div class="rb">'+r.b+'</div></div>';}).join('');
+  }
+
+  function renderAnalytics(){
+    var m=metrics(),bp=byProduct(),ba=byAge();
+    var segs=REASONS.map(function(x){return {label:x.r,value:m.oc[x.r]||0,color:x.color};}).filter(function(s){return s.value>0;});
+    $('#an-donut').innerHTML=donutSVG(segs)+'<div class="mid"><span class="n tnum">'+m.nNo+'</span><span class="t">Objections</span></div>';
+    $('#an-legend').innerHTML=segs.map(function(s){return '<div class="li"><span class="sw" style="background:'+s.color+'"></span><span class="ln">'+s.label+'</span><span class="lv">'+s.value+'</span></div>';}).join('');
+
+    var conv=$('#an-conv'); conv.innerHTML=barRows(bp.slice().sort(function(a,b){return b.rate-a.rate;}).map(function(b){
+      return {name:b.name,disp:b.rate+'%',pct:b.rate,color:b.rate>=50?'var(--emerald)':b.color};})).replace(/^<div class="bars">|<\/div>$/g,''); animateBars(conv);
+
+    // demographics stacked (purchased vs walked, by age)
+    var maxAge=Math.max.apply(null,ba.map(function(a){return a.total;}))||1;
+    var demo=$('#an-demo');
+    demo.innerHTML=ba.map(function(a){
+      var wy=a.total?Math.round(a.yes/maxAge*100):0, wn=a.total?Math.round(a.no/maxAge*100):0;
+      return '<div class="bar stack"><div class="bh"><span class="bn">'+a.age+'</span><span class="bv">'+a.total+' total</span></div>'+
+        '<div class="bt"><div class="bf" style="background:var(--emerald)" data-w="'+wy+'"></div><div class="bf" style="background:var(--rose)" data-w="'+wn+'"></div></div></div>';
+    }).join(''); animateBars(demo);
+
+    var age=$('#an-age'); age.innerHTML=barRows(ba.map(function(a){
+      return {name:a.age,disp:a.rate+'%  ('+a.yes+'/'+a.total+')',pct:a.rate,color:'linear-gradient(90deg,var(--indigo),var(--violet))'};})).replace(/^<div class="bars">|<\/div>$/g,''); animateBars(age);
+
+    var maxLost=Math.max.apply(null,bp.map(function(b){return b.lost;}))||1;
+    var lost=$('#an-lost'); lost.innerHTML=barRows(bp.slice().sort(function(a,b){return b.lost-a.lost;}).map(function(b){
+      return {name:b.name,disp:inr(b.lost),pct:Math.round(b.lost/maxLost*100),color:'var(--rose)'};})).replace(/^<div class="bars">|<\/div>$/g,''); animateBars(lost);
+
+    // funnel
+    var interest=m.total-(m.oc['Not Needed']||0);
+    var consider=interest-(m.oc['Need More Information']||0);
+    var steps=[{l:'Interaction',v:m.total},{l:'Interest',v:interest},{l:'Consideration',v:consider},{l:'Purchase',v:m.nYes}];
+    var cols=['#4F46E5','#6366F1','#818CF8','#059669'];
+    $('#an-funnel').innerHTML=steps.map(function(s,i){
+      var w=30+ (s.v/m.total)*70;
+      return '<div class="fn" style="width:'+w+'%;background:linear-gradient(135deg,'+cols[i]+',rgba(0,0,0,.06))">'+
+        '<span class="fl">'+s.l+'<span class="fp">'+pct(s.v,m.total)+'%</span></span><span class="fv">'+s.v+'</span></div>';
+    }).join('');
+
+    var bestP=bp.slice().sort(function(a,b){return b.rate-a.rate;})[0];
+    var ins=[
+      {c:'c1',k:'Pricing',b:'Price is the single largest objection — <b>'+pct(m.oc['Too Expensive']||0,m.nNo)+'%</b> of all walkaways.'},
+      {c:'c2',k:'Lost revenue',b:'<b>'+inr(m.lost)+'</b> in potential revenue walked away versus <b>'+inr(m.captured)+'</b> captured.'},
+      {c:'c3',k:'Best converter',b:'<b>'+bestP.name+'</b> leads conversion at <b>'+bestP.rate+'%</b>; weakest products drag the average down.'}
+    ];
+    $('#an-insights').innerHTML=ins.map(function(r){return '<div class="glass reco '+r.c+'"><div class="rk">'+r.k+'</div><div class="rb">'+r.b+'</div></div>';}).join('');
+  }
+
+  function renderWalkaways(){
+    var m=metrics();
+    var ranked=REASONS.map(function(x){return {r:x.r,n:m.oc[x.r]||0,action:x.action};})
+      .sort(function(a,b){return b.n-a.n;});
+    var maxN=ranked[0]?ranked[0].n:1;
+    var host=$('#wa-list');
+    host.innerHTML=ranked.map(function(x,i){
+      return '<div class="glass wa"><div class="rank">#'+(i+1)+'</div>'+
+        '<div class="wm"><h3>'+x.r+'</h3><div class="wact">'+I.spark.replace('var(--indigo)','currentColor')+
+        '<span><b style="color:var(--ink)">Suggested action — </b>'+x.action+'</span></div></div>'+
+        '<div class="wstat"><div class="wf">'+x.n+'</div><div class="wfl">customers · '+pct(x.n,m.nNo)+'%</div>'+
+        '<div class="wbar"><div class="wbf" data-w="'+Math.round(x.n/maxN*100)+'"></div></div></div></div>';
+    }).join('');
+    setTimeout(function(){Array.prototype.forEach.call(host.querySelectorAll('.wbf'),function(f,i){setTimeout(function(){f.style.width=f.getAttribute('data-w')+'%';},i*90);});},50);
+  }
+
+  function renderAI(){
+    var m=metrics(),bp=byProduct(),ba=byAge();
+    var bestP=bp.slice().sort(function(a,b){return b.rate-a.rate;})[0];
+    var bestA=ba.slice().sort(function(a,b){return b.rate-a.rate;})[0];
+    var recover=Math.round(m.lost*0.2);
+    var cards=[
+      {glow:'var(--indigo)',k:'Pricing signal',v:'<b>'+pct(m.oc['Too Expensive']||0,m.nNo)+'%</b> of customers cited price concerns.',d:'Pricing is your top objection. Test a starter tier or bundle to lower the entry barrier.'},
+      {glow:'var(--emerald)',k:'Top performer',v:'<b>'+bestP.name+'</b> has the highest conversion rate, at '+bestP.rate+'%.',d:'Use it as the lead product in demos to build early momentum and trust.'},
+      {glow:'var(--violet)',k:'Audience intent',v:'Customers aged <b>'+bestA.age+'</b> show the strongest purchase intent.',d:'Tailor messaging and follow-ups toward this group to lift overall conversion.'},
+      {glow:'var(--amber)',k:'Emerging risk',v:'<b>Trust-related</b> objections are worth watching closely.',d:'Reviews, guarantees and certifications at the point of sale can blunt this early.'},
+      {glow:'var(--sky)',k:'Recovery potential',v:'Follow-up campaigns may recover <b>~20%</b> of lost sales.',d:'That is roughly '+inr(recover)+' in winnable revenue from this dataset alone.'},
+      {glow:'var(--rose)',k:'Revenue at risk',v:'<b>'+inr(m.lost)+'</b> walked out the door unrecorded — until now.',d:'Every logged objection narrows the gap between interest and income.'}
+    ];
+    $('#ai-cards').innerHTML=cards.map(function(c){
+      return '<div class="glass ai"><div class="glow" style="background:'+c.glow+'"></div>'+
+        '<div class="ak" style="color:'+c.glow+'">'+I.spark+'Insight</div>'+
+        '<div class="av">'+c.v+'</div><div class="ad">'+c.d+'</div></div>';
+    }).join('');
+  }
+
+  /* ───── database ───── */
+  function renderDatabase(){
+    var q=($('#db-search').value||'').toLowerCase();
+    var fp=$('#db-product').value, fa=$('#db-age').value, fs=$('#db-status').value, fr=$('#db-reason').value;
+    var rows=data.filter(function(d){
+      if(fp&&d.product!==fp)return false;
+      if(fa&&d.age!==fa)return false;
+      if(fs&&d.decision!==fs)return false;
+      if(fr&&d.reason!==fr)return false;
+      if(q){var hay=(d.id+' '+d.product+' '+(d.reason||'')+' '+d.rep+' '+d.age).toLowerCase();if(hay.indexOf(q)<0)return false;}
+      return true;
+    }).sort(function(a,b){return b.date-a.date;});
+    $('#db-body').innerHTML=rows.map(function(d){
+      var no=d.decision==='No';
+      return '<tr><td class="cid">'+d.id+'</td><td class="muted">'+fmtDate(d.date)+'</td><td>'+d.product+'</td>'+
+        '<td><span class="tag '+(no?'no':'yes')+'">'+(no?'Walked away':'Purchased')+'</span></td>'+
+        '<td class="muted">'+(d.reason||'—')+'</td><td class="muted">'+d.age+'</td><td>'+d.rep+'</td></tr>';
+    }).join('') || '<tr><td colspan="7" style="padding:30px;text-align:center;color:var(--muted-2)">No interactions match these filters.</td></tr>';
+    $('#db-count').textContent=rows.length+' of '+data.length+' interactions';
+  }
+  function exportCSV(){
+    var head=['Customer ID','Date','Product','Decision','Reason','Age Group','Gender','Salesperson','Notes'];
+    var lines=[head.join(',')].concat(data.map(function(d){
+      return [d.id,d.date.toISOString().slice(0,10),d.product,d.decision,(d.reason||''),d.age,d.gender,d.rep,(d.notes||'').replace(/[",\n]/g,' ')]
+        .map(function(c){return '"'+String(c).replace(/"/g,'""')+'"';}).join(',');
+    }));
+    var blob=new Blob([lines.join('\n')],{type:'text/csv'});
+    var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='why-not-interactions.csv'; a.click();
+    toast('CSV exported');
+  }
+
+  function renderAbout(){
+    var steps=['Customer interaction','Salesperson records objection','Data stored in database','Analytics engine processes data','Dashboard generates insights','Business makes better decisions'];
+    $('#about-flow').innerHTML=steps.map(function(s,i){
+      return '<div class="fs"><span class="fn-num">'+(i+1)+'</span><span class="ft">'+s+'</span></div>'+
+        (i<steps.length-1?'<div class="conn"><span></span></div>':'');
+    }).join('');
+  }
+
+  /* ───── navigation ───── */
+  function show(v){
+    document.querySelectorAll('.view').forEach(function(x){x.classList.toggle('active',x.id==='view-'+v);});
+    document.querySelectorAll('[data-nav]').forEach(function(x){x.classList.toggle('active',x.getAttribute('data-nav')===v);});
+    window.scrollTo({top:0,behavior:'smooth'});
+    if(v==='home')renderHero();
+    if(v==='dashboard')renderDashboard();
+    if(v==='analytics')renderAnalytics();
+    if(v==='walkaways')renderWalkaways();
+    if(v==='ai')renderAI();
+    if(v==='database')renderDatabase();
+  }
+  document.addEventListener('click',function(e){
+    var t=e.target.closest('[data-go]'); if(t){e.preventDefault();show(t.getAttribute('data-go'));}
+  });
+
+  /* ───── record form ───── */
+  var sel={decision:null};
+  document.querySelectorAll('#f-decision .so').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('#f-decision .so').forEach(function(x){x.classList.remove('on');});
+      b.classList.add('on'); sel.decision=b.getAttribute('data-v');
+      $('#f-reasonblock').classList.toggle('show',sel.decision==='No');
+    });
+  });
+  $('#f-submit').addEventListener('click',function(){
+    var rep=$('#f-rep').value, age=$('#f-age').value, product=$('#f-product').value;
+    var reason=$('#f-reason').value, notes=$('#f-notes').value, gender=$('#f-gender').value;
+    if(!rep||!age||!product||!sel.decision||(sel.decision==='No'&&!reason)){toast('Please complete the required fields');return;}
+    var d=new Date();
+    data.push({id:'WN-'+String(data.length+1).padStart(3,'0'),product:product,decision:sel.decision,
+      reason:sel.decision==='No'?reason:null,age:age,gender:gender||'—',notes:notes,rep:rep,date:d});
+    // reset
+    ['f-rep','f-age','f-product','f-reason','f-gender'].forEach(function(id){$('#'+id).value='';});
+    $('#f-notes').value=''; sel.decision=null;
+    document.querySelectorAll('#f-decision .so').forEach(function(x){x.classList.remove('on');});
+    $('#f-reasonblock').classList.remove('show');
+    // success
+    var ok=$('#success'); ok.classList.add('show');
+    setTimeout(function(){ok.classList.remove('show');show('dashboard');},1700);
+  });
+
+  /* ───── database listeners ───── */
+  ['db-search','db-product','db-age','db-status','db-reason'].forEach(function(id){
+    var el=$('#'+id); el.addEventListener(id==='db-search'?'input':'change',renderDatabase);
+  });
+  $('#db-export').addEventListener('click',exportCSV);
+
+  /* ───── toast ───── */
+  var tTimer;
+  function toast(msg){var t=$('#toast');$('#toast-msg').textContent=msg;t.classList.add('show');clearTimeout(tTimer);tTimer=setTimeout(function(){t.classList.remove('show');},2200);}
+
+  /* init */
+  renderAbout();
+  show('home');
+})();
+</script>
+</body>
+</html>
